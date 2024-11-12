@@ -7,6 +7,9 @@ import jakarta.persistence.*;
 public class SetFound {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int SetFoundID;
+
     @ManyToOne
     @JoinColumn(name = "GAME_ID")
     private Game Game;

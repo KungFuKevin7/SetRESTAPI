@@ -8,14 +8,11 @@ import org.springframework.context.annotation.Primary;
 public class Game {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int GAME_ID;
 
     @Column
     private int SETS_FOUND;
-
-//    @Column
-//    private int PLAYER_ID;
 
     @ManyToOne
     @JoinColumn(name = "PLAYER_ID")

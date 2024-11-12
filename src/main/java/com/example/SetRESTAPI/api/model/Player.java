@@ -1,17 +1,15 @@
 package com.example.SetRESTAPI.api.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Players")
 public class Player {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int PLAYER_ID;
 
-    @Column
+    @Column(unique = true, nullable = false)
     private String PLAYER_NAME;
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class CardsOnBoard {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int CARDS_ON_BOARD;
 
     @ManyToOne

@@ -1,9 +1,14 @@
 package com.example.SetRESTAPI.api.repository;
 
+import com.example.SetRESTAPI.api.controller.CardController;
 import com.example.SetRESTAPI.api.model.Card;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public class CardRepository {
 
+@Repository
+public interface CardRepository extends JpaRepository<Card, Long> {
+/*
     public CardRepository() {
 
     }
@@ -13,6 +18,8 @@ public class CardRepository {
     }
 
     public void InsertAllCards() {
+
+        CardController cardController = new CardController();
 
         int[] shapes = {1,2,3};
         int[] textures = {1,2,3};
@@ -24,9 +31,10 @@ public class CardRepository {
                 for (int colour : colours){
                     for (int amount : amounts) {
 
+
                     }
                 }
             }
         }
-    }
+    }*/
 }

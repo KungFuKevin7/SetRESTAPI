@@ -9,13 +9,50 @@ public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int GAME_ID;
+    private int game_id;
 
     @Column
-    private int SETS_FOUND;
+    private int sets_found;
+
+    @Column
+    private int elapsed_time;
 
     @ManyToOne
-    @JoinColumn(name = "PLAYER_ID")
-    private Player PLAYER;
+    @JoinColumn(name = "player_id")
+    private Player player;
+
+
+    public int getGameId() {
+        return game_id;
+    }
+
+    public void setGameId(int game_id){
+        this.game_id = game_id;
+    }
+
+    public int getSetsFound(){
+        return sets_found;
+    }
+
+    public void setSetsFound(int sets_found){
+        this.sets_found = sets_found;
+    }
+
+    public int getElapsedTime(){
+        return elapsed_time;
+    }
+
+    public void setElapsedTime(int elapsed_time){
+        this.elapsed_time = elapsed_time;
+    }
+
+    public Player getPlayer(){
+        return player;
+    }
+
+    public void setPlayer(Player player){
+        this.player = player;
+    }
+
 
 }

@@ -13,4 +13,22 @@ public class SetRestapiApplication{
 		SpringApplication.run(SetRestapiApplication.class, args);
 	}
 
+
+	public void InsertAllCards() {
+
+		char[] shapes = {'W','O','D'};
+		char[] textures = {'H','E','F'};
+		int[] amounts = {1,2,3};
+		char[] colours= {'G','R','B'};
+
+		for (char shape : shapes) {
+			for (char texture : textures) {
+				for (char colour : colours){
+					for (int amount : amounts) {
+
+					}
+				}
+			}
+		}
+	}
 }

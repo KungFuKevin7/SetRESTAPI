@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cards")
+@CrossOrigin
 public class CardController{
 
     @Autowired
@@ -20,6 +21,11 @@ public class CardController{
     @GetMapping
     public List<Card> getAllCards(){
         return cardService.getAllCards();
+    }
+
+    @GetMapping("/shuffled-cards")
+    public List<Card> getTableCards(){
+        return cardService.getShuffledTableCards();
     }
 
     @GetMapping("/{id}")
@@ -33,6 +39,11 @@ public class CardController{
     @PostMapping
     public Card createCard(@RequestBody Card card){
         return cardService.addCard(card);
+    }
+
+    @PostMapping("/post-all-cards")
+    public List<Card> createAllCards(){
+        return cardService.addPlayingCards();
     }
 
     @DeleteMapping("/{id}")

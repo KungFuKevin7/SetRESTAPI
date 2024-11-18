@@ -8,8 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SetRestapiApplication{
 
 	public static void main(String[] args) {
+/*
+		//Get All Playing Cards
 		SetLogic SL = new SetLogic();
-		SL.insertPlayingCards();
+		SL.insertPlayingCards();*/
 
 		SpringApplication.run(SetRestapiApplication.class, args);
 	}

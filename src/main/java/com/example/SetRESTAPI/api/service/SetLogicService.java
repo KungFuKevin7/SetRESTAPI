@@ -5,28 +5,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class SetLogicService {
 
-    public List<List<Card>> FindSetOnTable(List<Card> cardsOnTable){
-        List<Card> TableCards = new ArrayList<Card>();
-        TableCards.add(new Card("AA", 3,'F', 'W','G'));
-        TableCards.add(new Card("AA", 2,'F','W', 'R'));
-        TableCards.add(new Card("AA", 1,'E','O', 'B'));
-        TableCards.add(new Card("AA", 2, 'F', 'D','G'));
-        TableCards.add(new Card("AA", 1, 'F', 'D','G'));
-        TableCards.add(new Card("AA", 2,'H', 'D', 'R'));
-        TableCards.add(new Card("AA", 3,'F','W', 'R'));
-        TableCards.add(new Card("AA", 1, 'H','O', 'B'));
-        TableCards.add(new Card("AA", 3,'F','W', 'G'));
-        TableCards.add(new Card("AA", 1,'E','D','G'));
-        TableCards.add(new Card("AA", 2,'H','O', 'G'));
-        TableCards.add(new Card("AA", 2,'F','W', 'G'));
-        return CheckIfSetsOnTable(TableCards, new ArrayList<Card>(), 0);
+    ///Find out whether the current playing table contains at least one set
+    public List<List<Card>> FindSetOnTable(Card[] cardsOnTable){
+        List<List<Card>> validSets = CheckIfSetsOnTable(Arrays.stream(cardsOnTable).toList(),
+                new ArrayList<>(), 0);
+
+        for (int i = 0; i < validSets.size(); i++) {
+            System.out.println("Set "+ i);
+            for (Card card : validSets.get(i)) {
+                System.out.println(
+                        card.getDisplayedAmount() + ", " +
+                        card.getShape() + ", " +
+                        card.getTexture() + ", " +
+                        card.getColour());
+            }
+        }
+        return validSets;
     }
 
+    /// Check all card combinations from the table
     public List<List<Card>> CheckIfSetsOnTable(List<Card> cardsOnTable, List<Card> currentCheckingSet, int index) {
         List<List<Card>> sets = new ArrayList<List<Card>>();
 
@@ -47,6 +50,7 @@ public class SetLogicService {
         return sets;
     }
 
+    ///Check if three cards make up a correct set
     public boolean checkIfSet(List<Card> cardsToCheck){
 
         //Check for each property if they are all equal or varying
@@ -67,6 +71,7 @@ public class SetLogicService {
                         (char)(cardsToCheck.get(2).getDisplayedAmount()+'0'));
     }
 
+    /// Check if a property of a set of cards is valid
     public boolean isCardPropertyValid(char firstCardProperty,
                                        char secondCardProperty,
                                        char thirdCardProperty){

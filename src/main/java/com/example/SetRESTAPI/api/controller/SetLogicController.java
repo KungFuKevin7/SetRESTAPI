@@ -27,7 +27,7 @@ public class SetLogicController {
     }
 
     @PostMapping("/on-table")
-    public List<List<Card>> CheckIfSetOnTable(@RequestBody List<Card> cardsOnTable) {
+    public List<List<Card>> CheckIfSetOnTable(@RequestBody Card[] cardsOnTable) {
         return setLogicService.FindSetOnTable(cardsOnTable);
     }
 

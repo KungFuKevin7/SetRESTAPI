@@ -12,7 +12,6 @@ import java.util.Optional;
 @Service
 public class CardsOnBoardService {
 
-
     private final CardsOnBoardRepository cardsOnBoardRepository;
 
     @Autowired
@@ -30,6 +29,7 @@ public class CardsOnBoardService {
     }
 
     public CardsOnBoard addCardsOnBoard(CardsOnBoard cardsOnBoard) {
+
         return cardsOnBoardRepository.save(cardsOnBoard);
     }
 

@@ -34,9 +34,10 @@ public class SetController {
     }
 
     @PostMapping
-    public Set createCard(@RequestBody Set set){
+    public List<Set> addSet(@RequestBody List<Set> set){
         return setService.addSet(set);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCard(@PathVariable Long id){

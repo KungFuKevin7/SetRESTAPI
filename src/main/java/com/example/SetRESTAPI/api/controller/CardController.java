@@ -23,7 +23,7 @@ public class CardController{
         return cardService.getAllCards();
     }
 
-    @GetMapping("/shuffled-cards")
+    @GetMapping("/shuffled")
     public List<Card> getTableCards(){
         return cardService.getShuffledTableCards();
     }
@@ -41,7 +41,7 @@ public class CardController{
         return cardService.addCard(card);
     }
 
-    @PostMapping("/post-all-cards")
+    @PostMapping("/add-all")
     public List<Card> createAllCards(){
         return cardService.addPlayingCards();
     }

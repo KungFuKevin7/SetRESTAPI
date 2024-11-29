@@ -9,18 +9,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class CardService {
 
     private final CardRepository cardRepository;
+    private final SetLogicService setLogicService;
 
     @Autowired
-    public CardService(CardRepository cardRepository) {
+    public CardService(CardRepository cardRepository, SetLogicService setLogicService) {
         this.cardRepository = cardRepository;
+        this.setLogicService = setLogicService;
     }
 
     public List<Card> getAllCards(){
@@ -28,7 +28,19 @@ public class CardService {
     }
 
     public List<Card> getShuffledTableCards(){
-        return cardRepository.getRandomTableCards();
+
+        Card[] shuffledCards = cardRepository.getRandomTableCards().toArray(new Card[0]);
+        //If no sets were found in current table
+        if (setLogicService.FindSetOnTable(shuffledCards).isEmpty()){
+            getShuffledTableCards();
+            if (true) {
+                System.out.println("please");
+                //no sets could be made anymore with playing cards
+            }
+        }
+
+        ///DB Call
+        return Arrays.stream(shuffledCards).toList();
     }
 
     public Optional<Card> getCardById(Long id){

@@ -33,8 +33,8 @@ public class SetService
         return true;
     }
 
-    public Set addSet(Set set){
-        return setRepository.save(set);
+    public List<Set> addSet(List<Set> set){
+        return setRepository.saveAll(set);
     }
 
     public void deleteSet(Long id){

@@ -1,3 +1,4 @@
+/*
 package com.example.SetRESTAPI.api.authentication;
 
 import io.micrometer.common.lang.NonNull;
@@ -19,8 +20,9 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import java.io.IOException;
 
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtUtil jwtUtil;
+public class JwtAuthenticationFilter {//extends OncePerRequestFilter {
+*/
+/*    private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
@@ -29,8 +31,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ){
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
-    }
+    }*//*
 
+*/
+/*
     @Override
     public void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -59,6 +63,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             }
         }
-    }
+    }*//*
+
 
 }
+*/

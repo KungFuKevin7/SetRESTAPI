@@ -1,11 +1,15 @@
 package com.example.SetRESTAPI.api.controller;
 
 
+import com.example.SetRESTAPI.api.dto.AuthRequest;
 import com.example.SetRESTAPI.api.model.Player;
 import com.example.SetRESTAPI.api.service.PlayerService;
 import com.example.SetRESTAPI.api.service.SetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+/*import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;*/
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +22,8 @@ public class PlayerController {
 
     @Autowired
     private PlayerService playerService;
+/*    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;*/
 
     @GetMapping
     public List<Player> getAllPlayers(){
@@ -29,9 +35,15 @@ public class PlayerController {
         return playerService.getPlayerById(id);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public Player addPlayer(@RequestBody Player player){
         return playerService.addPlayer(player);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody Player player){
+        System.out.println(player.getPlayer_name());
+        return "Login fired";
     }
 
     @DeleteMapping("/{id}")

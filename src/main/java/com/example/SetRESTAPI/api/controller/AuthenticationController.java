@@ -4,11 +4,11 @@ import com.example.SetRESTAPI.api.authentication.JwtUtil;
 import com.example.SetRESTAPI.api.dto.AuthRequest;
 import com.example.SetRESTAPI.api.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
+/*import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;*/
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class AuthenticationController {
 
-    private final AuthenticationManager authenticationManager;
+ /*   private final AuthenticationManager authenticationManager;
 
     private final UserDetailsService userDetailsService;
 
@@ -26,7 +26,8 @@ public class AuthenticationController {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtService;
-    }
+    }*/
+/*
 
     @PostMapping("/login")
     public String login(@RequestBody AuthRequest authRequest){
@@ -35,8 +36,11 @@ public class AuthenticationController {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getPlayername(), authRequest.getPassword()));
+*/
+/*
+        return jwtUtil.generateToken(authRequest.getPlayername());*//*
 
-        return jwtUtil.generateToken(authRequest.getPlayername());
     }
+*/
 
 }

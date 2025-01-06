@@ -1,8 +1,6 @@
 package com.example.SetRESTAPI.api.authentication;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Value;/*
+import org.springframework.security.core.userdetails.UserDetails;*/
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -18,24 +16,26 @@ public class JwtUtil {
     //@Value("${security.jwt.expiration-time}")
     private final int ExpirationTime = 300000;
 
-    public String getPlayerName(String token) {
+   /* public String getPlayerName(String token) {
         return Jwts.parser()
                 .setSigningKey(SecretKey)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
-    }
+    }*/
 
-    public String generateToken(String playerName) {
-      return Jwts.builder()
+    public String generateToken() {
+
+        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik5hdmluIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE1MTYyNDAyNH0.SVkl_u2Ev7ThYMAcSosUv5n1IN40e4kD87SO4Gnz8IQ";
+ /*     return Jwts.builder()
                 .setSubject(playerName)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ExpirationTime))
                 .signWith(SignatureAlgorithm.HS256, SecretKey)
-                .compact();
+                .compact();*/
     }
 
-    public boolean isTokenExpired(String token) {
+/*    public boolean isTokenExpired(String token) {
         Date expirationDate = Jwts.parser()
                 .setSigningKey(SecretKey)
                 .parseClaimsJws(token)
@@ -52,7 +52,7 @@ public class JwtUtil {
         } catch (Exception e) {
             return false;
         }
-    }
+    }*/
 
 
 

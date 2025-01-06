@@ -12,32 +12,22 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    @Value("${security.jwt.secret-key}")
+    //@Value("${security.jwt.secret-key}")
     private final String SecretKey = "secretKey";
 
-    @Value("${security.jwt.expiration-time}")
+    //@Value("${security.jwt.expiration-time}")
     private final int ExpirationTime = 300000;
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SecretKey).parseClaimsJws(token).getBody();
-    }
-
     public String getPlayerName(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return Jwts.parser()
+                .setSigningKey(SecretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
-    public Date getExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    public String generateToken(Map<String, Object> claims, String playerName) {
+    public String generateToken(String playerName) {
       return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(playerName)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ExpirationTime))
@@ -46,13 +36,19 @@ public class JwtUtil {
     }
 
     public boolean isTokenExpired(String token) {
-        return getExpiration(token).before(new Date());
+        Date expirationDate = Jwts.parser()
+                .setSigningKey(SecretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+
+        return expirationDate.before(new Date());
     }
 
-    public boolean validateToken(String receivedToken, UserDetails userDetails) {
+    public boolean validateToken(String receivedToken, String playerName) {
         try {
-            String playerName = getPlayerName(receivedToken);
-            return playerName.equals(userDetails.getUsername()) && !isTokenExpired(receivedToken);
+            String playername = getPlayerName(receivedToken);
+            return playerName.equals(playername) && !isTokenExpired(receivedToken);
         } catch (Exception e) {
             return false;
         }

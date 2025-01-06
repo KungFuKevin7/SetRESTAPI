@@ -24,6 +24,7 @@ public class CardService {
     }
 
     public List<Card> getAllCards(){
+        System.out.println("all cards");
         return cardRepository.findAll();
     }
 

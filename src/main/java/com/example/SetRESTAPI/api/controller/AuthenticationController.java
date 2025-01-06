@@ -1,26 +1,42 @@
 package com.example.SetRESTAPI.api.controller;
 
 import com.example.SetRESTAPI.api.authentication.JwtUtil;
+import com.example.SetRESTAPI.api.dto.AuthRequest;
 import com.example.SetRESTAPI.api.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private PlayerService playerService;
+    private final UserDetailsService userDetailsService;
 
-    @Autowired
-    private JwtUtil jwtService;
+    private final JwtUtil jwtUtil;
 
+    public AuthenticationController(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, JwtUtil jwtService) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtService;
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody AuthRequest authRequest){
+
+        System.out.println("login");
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequest.getPlayername(), authRequest.getPassword()));
+
+        return jwtUtil.generateToken(authRequest.getPlayername());
+    }
 
 }

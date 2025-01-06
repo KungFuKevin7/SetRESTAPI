@@ -20,6 +20,8 @@ public class Player implements UserDetails {
     @Column(unique = true, nullable = false)
     private String player_name;
 
+    @Column(nullable = false)
+    private String password;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -42,15 +44,6 @@ public class Player implements UserDetails {
     public void setPlayerName(String player_name){
         this.player_name = player_name;
     }
-
-    public Date getCreated_At() {
-        return created_At;
-    }
-
-    public void setCreated_At(Date created_At) {
-        this.created_At = created_At;
-    }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

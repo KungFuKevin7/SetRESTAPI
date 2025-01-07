@@ -5,6 +5,7 @@ import com.example.SetRESTAPI.api.dto.AuthRequest;
 import com.example.SetRESTAPI.api.model.Player;
 import com.example.SetRESTAPI.api.service.PlayerService;
 import com.example.SetRESTAPI.api.service.SetService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 /*import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,16 +18,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/player")
-@CrossOrigin
+@CrossOrigin("http://localhost:2020")
 public class PlayerController {
 
     @Autowired
     private PlayerService playerService;
-/*    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;*/
 
     @GetMapping
-    public List<Player> getAllPlayers(){
+    public List<Player> getAllPlayers(HttpServletRequest request){
         return playerService.getAllPlayers();
     }
 

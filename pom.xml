@@ -83,21 +83,19 @@
 			<scope>runtime</scope>
 		</dependency>
 
-<!--
-		&lt;!&ndash;Spring Security Config&ndash;&gt;
+		<!--Spring Security Config-->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>6.1.4</version>
 		</dependency>
 
-		&lt;!&ndash;Spring Security Web&ndash;&gt;
+		<!--Spring Security Web-->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 			<version>6.3.4</version>
 		</dependency>
--->
 
 		<!--Lombok-->
 		<dependency>

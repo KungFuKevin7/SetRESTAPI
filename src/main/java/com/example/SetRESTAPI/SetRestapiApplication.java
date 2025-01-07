@@ -11,8 +11,8 @@ public class SetRestapiApplication{
 	public static void main(String[] args) {
 
 		//Get All Playing Cards
-		//SetLogic SL = new SetLogic();
-		//SL.insertPlayingCards();
+		SetLogic SL = new SetLogic();
+		SL.insertPlayingCards();
 
 		SpringApplication.run(SetRestapiApplication.class, args);
 	}

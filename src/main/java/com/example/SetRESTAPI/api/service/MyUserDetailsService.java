@@ -4,55 +4,30 @@ import com.example.SetRESTAPI.api.model.Player;
 import com.example.SetRESTAPI.api.model.UserPrincipal;
 import com.example.SetRESTAPI.api.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-//User Details Service
-public class PlayerService { //implements org.springframework.security.core.userdetails.UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
     private PlayerRepository playerRepository;
 
-/*
     @Override
     public UserDetails loadUserByUsername(String playerName) throws UsernameNotFoundException {
+
         System.out.println("loadUserByUsername: " + playerName);
+
         Player player = playerRepository.findByPlayer_name(playerName);
+
         if (player == null) {
             throw new UsernameNotFoundException("Players " + playerName + " not found.");
         }
 
         return new UserPrincipal(player);
     }
-*/
 
-
-
-    public List<Player> getAllPlayers(){
-        return playerRepository.findAll();
-    }
-
-    public Optional<Player> getPlayerById(Long id){
-        return playerRepository.findById(id);
-    }
-
-    public Player addPlayer(Player players){
-        return playerRepository.save(players);
-    }
-
-
-    public void deletePlayer(Long id){
-        if (playerRepository.existsById(id)){
-            playerRepository.deleteById(id);
-        } else{
-            throw new RuntimeException("Players does not exist");
-        }
-    }
 
 }

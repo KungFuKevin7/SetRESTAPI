@@ -1,7 +1,6 @@
 package com.example.SetRESTAPI.api.model;
 
 import jakarta.persistence.*;
-import org.springframework.context.annotation.Primary;
 
 @Entity
 @Table(name = "Games")
@@ -45,14 +44,5 @@ public class Game {
     public void setElapsedTime(int elapsed_time){
         this.elapsed_time = elapsed_time;
     }
-
-    public Player getPlayer(){
-        return player;
-    }
-
-    public void setPlayer(Player player){
-        this.player = player;
-    }
-
 
 }

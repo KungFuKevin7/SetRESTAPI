@@ -17,8 +17,8 @@ public class Game {
     private int elapsed_time;
 
     @ManyToOne
-    @JoinColumn(name = "player_id")
-    private Player player;
+    @JoinColumn(name = "UserId")
+    private Users users;
 
 
     public int getGameId() {
@@ -35,14 +35,6 @@ public class Game {
 
     public void setSetsFound(int sets_found){
         this.sets_found = sets_found;
-    }
-
-    public int getElapsedTime(){
-        return elapsed_time;
-    }
-
-    public void setElapsedTime(int elapsed_time){
-        this.elapsed_time = elapsed_time;
     }
 
 }

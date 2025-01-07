@@ -1,8 +1,8 @@
 package com.example.SetRESTAPI.api.service;
 
-import com.example.SetRESTAPI.api.model.Player;
+import com.example.SetRESTAPI.api.model.Users;
 import com.example.SetRESTAPI.api.model.UserPrincipal;
-import com.example.SetRESTAPI.api.repository.PlayerRepository;
+import com.example.SetRESTAPI.api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,20 +13,20 @@ import org.springframework.stereotype.Service;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private UserRepository playerRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String playerName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
-        System.out.println("loadUserByUsername: " + playerName);
+        System.out.println("loadUserByUsername: " + userName);
 
-        Player player = playerRepository.findByPlayer_name(playerName);
+        Users user = playerRepository.findByUsername(userName);
 
-        if (player == null) {
-            throw new UsernameNotFoundException("Players " + playerName + " not found.");
+        if (user == null) {
+            throw new UsernameNotFoundException("Players " + userName + " not found.");
         }
 
-        return new UserPrincipal(player);
+        return new UserPrincipal(user);
     }
 
 

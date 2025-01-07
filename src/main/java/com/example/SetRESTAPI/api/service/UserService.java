@@ -1,0 +1,41 @@
+package com.example.SetRESTAPI.api.service;
+
+import com.example.SetRESTAPI.api.model.Users;
+import com.example.SetRESTAPI.api.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+//User Details Service
+public class UserService { //implements org.springframework.security.core.userdetails.UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+
+    public List<Users> getAllUsers(){
+        return userRepository.findAll();
+    }
+
+    public Optional<Users> getUserById(Long id){
+        return userRepository.findById(id);
+    }
+
+    public Users addUser(Users users){
+        return userRepository.save(users);
+    }
+
+
+    public void deleteUser(Long id){
+        if (userRepository.existsById(id)){
+            userRepository.deleteById(id);
+        } else{
+            throw new RuntimeException("User does not exist");
+        }
+    }
+
+}

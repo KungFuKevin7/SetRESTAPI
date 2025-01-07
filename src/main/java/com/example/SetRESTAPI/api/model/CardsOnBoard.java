@@ -1,6 +1,8 @@
 package com.example.SetRESTAPI.api.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "CardsOnBoard")
@@ -10,10 +12,14 @@ public class CardsOnBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int card_on_board_id;
 
+    @Getter
+    @Setter
     @ManyToOne
     @JoinColumn(name="card_id")
     private Card card;
 
+    @Setter
+    @Getter
     @ManyToOne
     @JoinColumn(name="game_id")
     private Game game;
@@ -26,19 +32,4 @@ public class CardsOnBoard {
         this.card_on_board_id = cards_on_board_id;
     }
 
-    public Card getCard(){
-        return this.card;
-    }
-
-    public void setCard(Card card){
-        this.card = card;
-    }
-
-    public Game getGame() {
-        return this.game;
-    }
-
-    public void setGame(Game game){
-        this.game = game;
-    }
 }

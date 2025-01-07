@@ -1,46 +1,28 @@
 package com.example.SetRESTAPI.api.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Set")
 public class Set {
 
     @Id
+    @Getter
+    @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int set_id;
+    private int SetId;
 
     @ManyToOne
+    @Getter
+    @Setter
     @JoinColumn(name="card_id")
     private Card card;
 
     @ManyToOne
+    @Getter
     @JoinColumn(name="game_id")
     private Game game;
-
-
-    public int getSetId() {
-        return set_id;
-    }
-
-    public void setSetId(int set_id){
-        this.set_id = set_id;
-    }
-
-    public Card getCard(){
-        return card;
-    }
-
-    public void setCard(Card card){
-        this.card = card;
-    }
-
-    public Game getGame(){
-        return game;
-    }
-
-    public void setGame(Game game){
-        this.game = game;
-    }
 
 }

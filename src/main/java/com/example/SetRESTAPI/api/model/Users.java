@@ -1,35 +1,27 @@
 package com.example.SetRESTAPI.api.model;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
-
 import java.util.Date;
 
 @Entity
-@Table(name = "Player")
-public class Player {
+@Table(name = "Users")
+public class Users {
 
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int player_id;
+    private int UserId;
 
     @Setter
     @Getter
     @Column(unique = true, nullable = false)
-    private String player_name;
+    private String Username;
 
     @Setter
     @Getter
     @Column(nullable = false)
-    private String password;
-
-    @CreatedDate
-    @Column(name = "created_at")
-    private Date created_At;
-
-
-
+    private String Password;
 
 }

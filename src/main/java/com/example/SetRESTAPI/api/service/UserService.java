@@ -56,8 +56,8 @@ public class UserService {
 
         if(authentication.isAuthenticated()){
             return jwtService.generateJwtToken(user.getUsername());
+        }else{
+            throw new RuntimeException("Authentication failed");
         }
-
-        return "failure";
     }
 }

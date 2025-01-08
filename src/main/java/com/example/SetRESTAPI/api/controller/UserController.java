@@ -27,11 +27,12 @@ public class UserController {
 
     @GetMapping("/get-csrf")
     public CsrfToken getCsrfToken(HttpServletRequest request){
+
         return (CsrfToken) request.getAttribute("_csrf");
     }
 
     @GetMapping("/{id}")
-    public Optional<Users> getUserById(@PathVariable Long id){
+    public Optional<Users> getUserById(@PathVariable int id){
         return userService.getUserById(id);
     }
 
@@ -41,13 +42,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Users  user){
-        System.out.println(user.getUsername());
+    public String login(@RequestBody Users user){
         return "Login fired";
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Users> deletePlayer(@PathVariable Long id){
+    public ResponseEntity<Users> deletePlayer(@PathVariable int id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

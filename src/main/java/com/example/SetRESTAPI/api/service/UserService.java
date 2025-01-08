@@ -21,7 +21,7 @@ public class UserService { //implements org.springframework.security.core.userde
         return userRepository.findAll();
     }
 
-    public Optional<Users> getUserById(Long id){
+    public Optional<Users> getUserById(int id){
         return userRepository.findById(id);
     }
 
@@ -29,8 +29,7 @@ public class UserService { //implements org.springframework.security.core.userde
         return userRepository.save(users);
     }
 
-
-    public void deleteUser(Long id){
+    public void deleteUser(int id){
         if (userRepository.existsById(id)){
             userRepository.deleteById(id);
         } else{

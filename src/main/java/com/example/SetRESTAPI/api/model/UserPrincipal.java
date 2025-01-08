@@ -9,7 +9,10 @@ import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
 
-    private Users user;
+
+    private static final long serialVersionUID = 1L;
+
+    private final Users user;
 
     public UserPrincipal(Users user) {
         this.user = user;
@@ -29,5 +32,28 @@ public class UserPrincipal implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;	}
+
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
 
 }

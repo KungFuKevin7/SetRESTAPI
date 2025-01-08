@@ -44,7 +44,9 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@RequestBody Users user){
-        return "Login fired";
+        System.out.println(user.getUsername());
+        //Verify user and create Jwt
+        return userService.verify(user);
     }
 
     @DeleteMapping("/{id}")

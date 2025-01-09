@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -43,10 +45,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Users user){
-        System.out.println(user.getUsername());
+    public ResponseEntity<Map<String, String>> login(@RequestBody Users user){
+
         //Verify user and create Jwt
-        return userService.verify(user);
+        String token = userService.verify(user);
+
+        //Convert Information to JSON
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        response.put("username", user.getUsername());
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")

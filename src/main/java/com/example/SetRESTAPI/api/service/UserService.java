@@ -26,7 +26,7 @@ public class UserService {
     @Autowired
     AuthenticationManager authenticationManager;
 
-    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(10);
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(10);
 
     public List<Users> getAllUsers(){
         return userRepository.findAll();
@@ -59,5 +59,9 @@ public class UserService {
         }else{
             throw new RuntimeException("Authentication failed");
         }
+    }
+
+    public long getRemainingTime(String token){
+        return jwtService.getTimeUntilExpirationMillis(token);
     }
 }

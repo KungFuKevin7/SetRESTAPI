@@ -1,6 +1,7 @@
 package com.example.SetRESTAPI.api.controller;
 
 
+import com.example.SetRESTAPI.api.dto.AuthTokenDto;
 import com.example.SetRESTAPI.api.model.Users;
 import com.example.SetRESTAPI.api.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -40,27 +39,33 @@ public class UserController {
 
     @PostMapping("/register")
     public Users register(@RequestBody Users user){
-
         return userService.register(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Users user){
+    public ResponseEntity<AuthTokenDto> login(@RequestBody Users user){
 
         //Verify user and create Jwt
         String token = userService.verify(user);
+        long timeRemaining = userService.getRemainingTime(token);
 
-        //Convert Information to JSON
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-        response.put("username", user.getUsername());
+        //Convert to Dto
+        AuthTokenDto authTokenDto = new AuthTokenDto(
+                user.getUsername()
+                ,token
+                ,timeRemaining);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(authTokenDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Users> deletePlayer(@PathVariable int id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/get-time")
+    public long getTime(String token){
+        return userService.getRemainingTime(token);
     }
 }

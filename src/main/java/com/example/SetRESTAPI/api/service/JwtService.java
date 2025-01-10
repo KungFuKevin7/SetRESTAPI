@@ -41,7 +41,7 @@ public class JwtService {
                 .add(claims)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 200)) //12 minutes
+                .expiration(new Date(System.currentTimeMillis() + 600000))//10 minutes
                 .and()
                 .signWith(getKey())
                 .compact();
@@ -81,6 +81,11 @@ public class JwtService {
 
     private Date extractExpiration(String jwtToken) {
         return extractClaim(jwtToken, Claims::getExpiration);
+    }
+
+    public long getTimeUntilExpirationMillis(String jwtToken) {
+        return extractExpiration(jwtToken).getTime() - new Date().getTime();
+
     }
 
 }

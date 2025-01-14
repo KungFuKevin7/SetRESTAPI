@@ -48,9 +48,11 @@ public class UserController {
         //Verify user and create Jwt
         String token = userService.verify(user);
         long timeRemaining = userService.getRemainingTime(token);
+        Users loggedIn = userService.getUserByUsername(user.getUsername());
 
         //Convert to Dto
         AuthTokenDto authTokenDto = new AuthTokenDto(
+                loggedIn.getUserid(),
                 user.getUsername()
                 ,token
                 ,timeRemaining);

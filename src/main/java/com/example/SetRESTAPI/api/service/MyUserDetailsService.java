@@ -20,8 +20,6 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
-        System.out.println("Login attempt by: " + userName);
-
         Users user = userRepository.findByUsername(userName);
 
         if (user == null) {

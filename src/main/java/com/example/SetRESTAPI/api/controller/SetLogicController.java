@@ -31,4 +31,9 @@ public class SetLogicController {
         return setLogicService.FindSetOnTable(cardsOnTable);
     }
 
+    @PostMapping("/hint")
+    public List<Card> CheckIfSetHint(@RequestBody Card[] cardsOnTable) {
+        return setLogicService.getSetHint(cardsOnTable);
+    }
+
 }

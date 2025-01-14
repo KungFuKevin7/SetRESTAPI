@@ -57,7 +57,7 @@ public class SecurityConfig {
             .build();
     }
 
-    //Disable the fucking CORS-Circlejerkery
+    //Disable the 'fancy fucking' CORS-nonsense
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

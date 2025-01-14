@@ -19,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+//Filter to parse JWT
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 

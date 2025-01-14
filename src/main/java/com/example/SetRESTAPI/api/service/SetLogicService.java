@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class SetLogicService {
@@ -88,5 +89,21 @@ public class SetLogicService {
             return true;
         }
         return false;
+    }
+
+    public List<Card> getSetHint(Card[] cardsOnTable){
+        List<List<Card>> allSets = FindSetOnTable(cardsOnTable);
+
+        //From all possible sets, select a random one
+        int randomIndex = new Random().nextInt(allSets.size());
+
+        //Get random set
+        List<Card> hintedSet = allSets.get(randomIndex);
+
+        //Remove a random card 0 - 3
+        hintedSet.remove(hintedSet.get(new Random().nextInt(3)));
+
+        //get
+        return hintedSet;
     }
 }

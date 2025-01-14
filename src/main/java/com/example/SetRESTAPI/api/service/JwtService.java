@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+//JWT Utilities
 @Service
 public class JwtService {
 
@@ -41,7 +42,7 @@ public class JwtService {
                 .add(claims)
                 .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 600000))//10 minutes
+                .expiration(new Date(System.currentTimeMillis() + 6000000))//100 minutes
                 .and()
                 .signWith(getKey())
                 .compact();

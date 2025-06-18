@@ -29,19 +29,14 @@ public class CardService {
     }
 
     public List<Card> getShuffledTableCards(){
+        List<Card> shuffledTableCards;
 
-        Card[] shuffledCards = cardRepository.getRandomTableCards().toArray(new Card[0]);
-        //If no sets were found in current table
-        if (setLogicService.FindSetOnTable(shuffledCards).isEmpty()){
-            getShuffledTableCards();
-            if (true) {
-                System.out.println("please");
-                //no sets could be made anymore with playing cards
-            }
-        }
+        do{
+            shuffledTableCards = cardRepository.getRandomTableCards();
+        } while (setLogicService.FindSetOnTable(shuffledTableCards.toArray(new Card[0])).isEmpty());
 
-        ///DB Call
-        return Arrays.stream(shuffledCards).toList();
+        ///DB Call to add cards to db
+        return shuffledTableCards;
     }
 
     public Optional<Card> getCardById(Long id){

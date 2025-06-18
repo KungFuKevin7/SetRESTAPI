@@ -94,11 +94,8 @@ public class SetLogicService {
     public List<Card> getSetHint(Card[] cardsOnTable){
         List<List<Card>> allSets = FindSetOnTable(cardsOnTable);
 
-        //From all possible sets, select a random one
-        int randomIndex = new Random().nextInt(allSets.size());
-
         //Get random set
-        List<Card> hintedSet = allSets.get(randomIndex);
+        List<Card> hintedSet = allSets.getFirst();
 
         //Remove a random card 0 - 3
         hintedSet.remove(hintedSet.get(new Random().nextInt(3)));

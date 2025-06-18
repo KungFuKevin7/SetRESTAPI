@@ -4,8 +4,10 @@ package com.example.SetRESTAPI.api.controller;
 import java.util.List;
 import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.model.Set;
+import com.example.SetRESTAPI.api.model.Users;
 import com.example.SetRESTAPI.api.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +30,21 @@ public class GameController {
                 map(ResponseEntity::ok).orElseGet(() ->
                 ResponseEntity.notFound().build()
         );
+    }
+
+    @GetMapping("/by-user/{id}")
+    public ResponseEntity<List<Game>> getUserGamesById(@PathVariable Long id){
+        List<Game> games = gameService.getGamesByUser(id);
+        if(games.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(games);
+    }
+
+    @PostMapping("/start-new")
+    public ResponseEntity<Game> startNewGame(@RequestBody Users user) {
+        Game startedGame = gameService.startGame(user);
+        return new ResponseEntity<>(startedGame, HttpStatus.CREATED);
     }
 
     @PostMapping

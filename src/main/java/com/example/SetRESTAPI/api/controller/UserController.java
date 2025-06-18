@@ -22,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<Users> getAllUsers(HttpServletRequest request){
+    public List<Users> getAllUsers(){
         return userService.getAllUsers();
     }
 

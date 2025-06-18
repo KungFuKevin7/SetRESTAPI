@@ -1,6 +1,7 @@
 package com.example.SetRESTAPI.api.model;
 
 import jakarta.persistence.*;
+import org.apache.catalina.User;
 
 @Entity
 @Table(name = "Games")
@@ -35,6 +36,25 @@ public class Game {
 
     public void setSetsFound(int sets_found){
         this.sets_found = sets_found;
+    }
+
+    public int getElapsedTime(){
+        return elapsed_time;
+    }
+
+    public void setElapsedTime(int time){
+        this.elapsed_time = time;
+    }
+
+    public Users getUser(){
+        return users;
+    }
+
+    public void setUsers(Users user){
+        this.users = user;
+    }
+    public void setUsersById(int userId){
+        this.users.setUserid(userId);
     }
 
 }

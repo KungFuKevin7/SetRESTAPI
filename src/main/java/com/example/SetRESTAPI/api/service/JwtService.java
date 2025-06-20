@@ -35,12 +35,13 @@ public class JwtService {
         }
     }
 
-    public String generateJwtToken(String username) {
+    public String generateJwtToken(String username, int userId) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
+                .subject(username)
+                .claim("userId", userId)
                 .claims()
                 .add(claims)
-                .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 6000000))//100 minutes
                 .and()
@@ -57,6 +58,11 @@ public class JwtService {
     public String extractUserName(String jwtToken) {
         return extractClaim(jwtToken, Claims::getSubject);
     }
+
+    public Long extractUserId(String jwtToken) {
+        return extractClaim(jwtToken, claims -> claims.get("userId", Long.class));
+    }
+
 
     private <T> T extractClaim(String jwtToken, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(jwtToken);

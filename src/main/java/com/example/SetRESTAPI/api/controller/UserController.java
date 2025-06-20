@@ -3,6 +3,7 @@ package com.example.SetRESTAPI.api.controller;
 
 import com.example.SetRESTAPI.api.dto.AuthTokenDto;
 import com.example.SetRESTAPI.api.model.Users;
+import com.example.SetRESTAPI.api.service.JwtService;
 import com.example.SetRESTAPI.api.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping
     public List<Users> getAllUsers(){
@@ -46,18 +50,27 @@ public class UserController {
     public ResponseEntity<AuthTokenDto> login(@RequestBody Users user){
 
         //Verify user and create Jwt
+        Users loggedIn = userService.getUserByUsername(user.getUsername());
+        user.setUserid(loggedIn.getUserid());
         String token = userService.verify(user);
         long timeRemaining = userService.getRemainingTime(token);
-        Users loggedIn = userService.getUserByUsername(user.getUsername());
 
         //Convert to Dto
         AuthTokenDto authTokenDto = new AuthTokenDto(
-                loggedIn.getUserid(),
+                user.getUserid(),
                 user.getUsername()
                 ,token
                 ,timeRemaining);
 
         return ResponseEntity.ok(authTokenDto);
+    }
+
+    @PostMapping("/get-token")
+    public ResponseEntity<?> getUserFromToken(String token) {
+        token = token.replace("Bearer ", "");
+        Long userId = jwtService.extractUserId(token);
+
+        return ResponseEntity.ok("access Granted to user: " + userId);
     }
 
     @DeleteMapping("/{id}")

@@ -59,7 +59,7 @@ public class UserService {
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
         if(authentication.isAuthenticated()){
-            return jwtService.generateJwtToken(user.getUsername());
+            return jwtService.generateJwtToken(user.getUsername(), user.getUserid());
         }else{
             throw new RuntimeException("Authentication failed");
         }

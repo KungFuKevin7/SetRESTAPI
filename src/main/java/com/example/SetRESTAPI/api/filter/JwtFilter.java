@@ -36,15 +36,17 @@ public class JwtFilter extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader("Authorization");
         String jwtToken = null;
         String username = null;
+        Long userId = null;
 
         //Check if format of token is valid
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwtToken = authorizationHeader.substring(7); // Start reading from the 7th character (Skip "Bearer ")
             username = jwtService.extractUserName(jwtToken);
+            userId = jwtService.extractUserId(jwtToken);
         }
 
         //If username is not empty, get userdetails from database (loadUserByUsername)
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (userId != null && username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = applicationContext.getBean(MyUserDetailsService.class).loadUserByUsername(username);
 

@@ -3,6 +3,7 @@ package com.example.SetRESTAPI.api.service;
 import aj.org.objectweb.asm.commons.Remapper;
 import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.model.Set;
+import com.example.SetRESTAPI.api.model.UserPrincipal;
 import com.example.SetRESTAPI.api.model.Users;
 import com.example.SetRESTAPI.api.repository.GameRepository;
 import com.example.SetRESTAPI.api.repository.UserRepository;
@@ -28,8 +29,8 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public List<Game> getGamesByUser(long userId) {
-        return gameRepository.findByUsers_Userid(userId);
+    public List<Game> getGamesByUser(UserPrincipal user) {
+        return gameRepository.findByUsers_Userid(user.getUserId());
     }
 
     public Optional<Game> getGameById(Long id) {

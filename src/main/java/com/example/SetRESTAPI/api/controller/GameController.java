@@ -4,11 +4,13 @@ package com.example.SetRESTAPI.api.controller;
 import java.util.List;
 import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.model.Set;
+import com.example.SetRESTAPI.api.model.UserPrincipal;
 import com.example.SetRESTAPI.api.model.Users;
 import com.example.SetRESTAPI.api.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,9 +34,9 @@ public class GameController {
         );
     }
 
-    @GetMapping("/by-user/{id}")
-    public ResponseEntity<List<Game>> getUserGamesById(@PathVariable Long id){
-        List<Game> games = gameService.getGamesByUser(id);
+    @GetMapping("/by-user")
+    public ResponseEntity<List<Game>> getUserGamesById(@AuthenticationPrincipal UserPrincipal user){
+        List<Game> games = gameService.getGamesByUser(user);
         if(games.isEmpty()){
             return ResponseEntity.notFound().build();
         }

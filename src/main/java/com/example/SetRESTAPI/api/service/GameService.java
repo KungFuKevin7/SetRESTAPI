@@ -1,28 +1,37 @@
 package com.example.SetRESTAPI.api.service;
 
 import aj.org.objectweb.asm.commons.Remapper;
-import com.example.SetRESTAPI.api.model.Game;
-import com.example.SetRESTAPI.api.model.Set;
-import com.example.SetRESTAPI.api.model.UserPrincipal;
-import com.example.SetRESTAPI.api.model.Users;
+import com.example.SetRESTAPI.api.dto.DeckCardDto;
+import com.example.SetRESTAPI.api.dto.GameInitDto;
+import com.example.SetRESTAPI.api.model.*;
+import com.example.SetRESTAPI.api.publics.GameStatus;
+import com.example.SetRESTAPI.api.repository.DeckCardRepository;
 import com.example.SetRESTAPI.api.repository.GameRepository;
 import com.example.SetRESTAPI.api.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService {
 
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
+    private final CardService cardService;
+    private final DeckCardRepository deckCardRepository;
 
     @Autowired
-    public GameService(GameRepository gameRepository, UserRepository userRepository) {
+    public GameService(GameRepository gameRepository, UserRepository userRepository, CardService cardService, DeckCardRepository deckCardRepository) {
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
+        this.cardService = cardService;
+        this.deckCardRepository = deckCardRepository;
     }
 
     public List<Game> getAllGames() {
@@ -30,7 +39,7 @@ public class GameService {
     }
 
     public List<Game> getGamesByUser(UserPrincipal user) {
-        return gameRepository.findByUsers_Userid(user.getUserId());
+        return gameRepository.findByUsers_Userid(user.getUserId(), Sort.by(Sort.Order.desc("status")));
     }
 
     public Optional<Game> getGameById(Long id) {
@@ -49,12 +58,40 @@ public class GameService {
         }
     }
 
-    public Game startGame(Users user)
-    {
+    public Game startGame(Users user) {
         Game game = new Game();
-        game.setElapsedTime(0);
+        game.setElapsed_time(0);
         game.setUsers(user);
-        game.setSetsFound(0);
+        game.setStatus(GameStatus.InProgress);
+        game.setSets_found(0);
+        game.setCreated_at(LocalDateTime.now());
         return gameRepository.save(game);
+    }
+
+    @Transactional
+    public GameInitDto startGameWithDeck(Users user) {
+        Game game = startGame(user);
+
+        List<Card> playingCards = cardService.getAllCardsShuffled();
+
+        List<DeckCard> deckCards = new ArrayList<>();
+
+        for (int i = 0; i < playingCards.size(); i++) {
+            DeckCard deckCard = new DeckCard();
+            deckCard.setPosition(i);
+            deckCard.setCard(playingCards.get(i));
+            deckCard.setGame(game);
+            deckCard.setStatus("In Playing Deck");
+            deckCards.add(deckCard);
+        }
+
+        deckCardRepository.saveAll(deckCards);
+
+        List<DeckCardDto> deckCardDtos = deckCards
+                .stream()
+                .map(DeckCardDto::new)
+                .toList();
+
+        return new GameInitDto(game.getGame_id(), deckCardDtos);
     }
 }

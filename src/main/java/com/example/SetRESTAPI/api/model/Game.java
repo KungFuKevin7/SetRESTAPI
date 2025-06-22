@@ -1,60 +1,47 @@
 package com.example.SetRESTAPI.api.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.catalina.User;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "Games")
 public class Game {
 
     @Id
+    @Getter
+    @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int game_id;
 
     @Column
+    @Getter
+    @Setter
     private int sets_found;
 
     @Column
+    @Getter
+    @Setter
     private int elapsed_time;
 
     @ManyToOne
     @JoinColumn(name = "UserId")
+    @Getter
+    @Setter
     private Users users;
 
+    @Column
+    @Getter
+    @Setter
+    private String status;
 
-    public int getGameId() {
-        return game_id;
-    }
-
-    public void setGameId(int game_id){
-        this.game_id = game_id;
-    }
-
-    public int getSetsFound(){
-        return sets_found;
-    }
-
-    public void setSetsFound(int sets_found){
-        this.sets_found = sets_found;
-    }
-
-    public int getElapsedTime(){
-        return elapsed_time;
-    }
-
-    public void setElapsedTime(int time){
-        this.elapsed_time = time;
-    }
-
-    public Users getUser(){
-        return users;
-    }
-
-    public void setUsers(Users user){
-        this.users = user;
-    }
-    public void setUsersById(int userId){
-        this.users.setUserid(userId);
-    }
-
+    @Column
+    @Getter
+    @Setter
+    private LocalDateTime created_at;
 }

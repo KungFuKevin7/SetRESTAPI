@@ -23,10 +23,16 @@ public class CardService {
         this.setLogicService = setLogicService;
     }
 
-    public List<Card> getAllCards(){
-        System.out.println("all cards");
+    public List<Card> getAllCards() {
         return cardRepository.findAll();
     }
+
+    public List<Card> getAllCardsShuffled() {
+        List<Card> cards = cardRepository.findAll();
+        Collections.shuffle(cards);
+        return cards;
+    }
+
 
     public List<Card> getShuffledTableCards(){
         List<Card> shuffledTableCards;

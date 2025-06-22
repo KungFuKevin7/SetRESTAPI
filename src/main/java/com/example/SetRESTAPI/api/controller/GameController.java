@@ -2,6 +2,9 @@ package com.example.SetRESTAPI.api.controller;
 
 
 import java.util.List;
+
+import com.example.SetRESTAPI.api.dto.DeckCardDto;
+import com.example.SetRESTAPI.api.dto.GameInitDto;
 import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.model.Set;
 import com.example.SetRESTAPI.api.model.UserPrincipal;
@@ -44,9 +47,16 @@ public class GameController {
     }
 
     @PostMapping("/start-new")
-    public ResponseEntity<Game> startNewGame(@RequestBody Users user) {
-        Game startedGame = gameService.startGame(user);
+    public ResponseEntity<Game> startNewGame(@AuthenticationPrincipal UserPrincipal user) {
+        Game startedGame = gameService.startGame(user.getUser());
         return new ResponseEntity<>(startedGame, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/start-game-with-deck")
+    public ResponseEntity<GameInitDto> startNewGameWithDeck(@AuthenticationPrincipal UserPrincipal user)
+    {
+        GameInitDto gameInitDto = gameService.startGameWithDeck(user.getUser());
+        return new ResponseEntity<>(gameInitDto, HttpStatus.CREATED);
     }
 
     @PostMapping

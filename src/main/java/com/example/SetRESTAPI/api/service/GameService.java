@@ -82,6 +82,7 @@ public class GameService {
             deckCard.setCard(playingCards.get(i));
             deckCard.setGame(game);
             deckCard.setStatus("In Playing Deck");
+
             deckCards.add(deckCard);
         }
 

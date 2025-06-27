@@ -1,11 +1,16 @@
 package com.example.SetRESTAPI.api.service;
 
+import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.model.CardsOnBoard;
+import com.example.SetRESTAPI.api.model.Card;
 import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.repository.CardsOnBoardRepository;
+import com.example.SetRESTAPI.api.repository.GameRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +18,12 @@ import java.util.Optional;
 public class CardsOnBoardService {
 
     private final CardsOnBoardRepository cardsOnBoardRepository;
+    private final GameRepository gameRepository;
 
     @Autowired
-    public CardsOnBoardService(CardsOnBoardRepository cardsOnBoardRepository) {
+    public CardsOnBoardService(CardsOnBoardRepository cardsOnBoardRepository, GameRepository gameRepository) {
         this.cardsOnBoardRepository = cardsOnBoardRepository;
+        this.gameRepository = gameRepository;
     }
 
     public List<CardsOnBoard> getAllCardsOnBoard() {
@@ -34,8 +41,23 @@ public class CardsOnBoardService {
     }
 
     //Adds the initial 12 cards to the database
-    public List<CardsOnBoard> addCardsOnBoard(List<CardsOnBoard> cardsOnBoard) {
-        return cardsOnBoardRepository.saveAll(cardsOnBoard);
+    @Transactional
+    public List<CardsOnBoard> addCardsOnBoard(List<DeckCardDto> cardsOnBoard, long gameId) {
+
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow();
+
+        List<CardsOnBoard> cardOnBoardItems = new ArrayList<>();
+
+        for (var card : cardsOnBoard) {
+            CardsOnBoard cardsOnBoardItem = new CardsOnBoard();
+            cardsOnBoardItem.setGame(game);
+            cardsOnBoardItem.setCard(card.convertToCard());
+            cardOnBoardItems.add(cardsOnBoardItem);
+
+        }
+
+        return cardsOnBoardRepository.saveAll(cardOnBoardItems);
     }
 
     //Removes a single card from the board

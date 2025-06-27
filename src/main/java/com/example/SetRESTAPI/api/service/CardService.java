@@ -33,7 +33,6 @@ public class CardService {
         return cards;
     }
 
-
     public List<Card> getShuffledTableCards(){
         List<Card> shuffledTableCards;
 

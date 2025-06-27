@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class AuthTokenDto {
-    private int userid;
+/*    private int userid;*/
     private String username;
     private String token;
     private long expiresInMillis;

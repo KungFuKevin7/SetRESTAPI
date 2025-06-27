@@ -57,10 +57,10 @@ public class UserController {
 
         //Convert to Dto
         AuthTokenDto authTokenDto = new AuthTokenDto(
-                user.getUserid(),
-                user.getUsername()
-                ,token
-                ,timeRemaining);
+/*                user.getUserid(),*/
+                user.getUsername(),
+                token,
+                timeRemaining);
 
         return ResponseEntity.ok(authTokenDto);
     }

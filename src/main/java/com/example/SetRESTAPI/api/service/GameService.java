@@ -5,6 +5,7 @@ import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.GameInitDto;
 import com.example.SetRESTAPI.api.model.*;
 import com.example.SetRESTAPI.api.publics.GameStatus;
+import com.example.SetRESTAPI.api.repository.CardsOnBoardRepository;
 import com.example.SetRESTAPI.api.repository.DeckCardRepository;
 import com.example.SetRESTAPI.api.repository.GameRepository;
 import com.example.SetRESTAPI.api.repository.UserRepository;
@@ -25,13 +26,15 @@ public class GameService {
     private final UserRepository userRepository;
     private final CardService cardService;
     private final DeckCardRepository deckCardRepository;
+    private final CardsOnBoardRepository cardsOnBoardRepository;
 
     @Autowired
-    public GameService(GameRepository gameRepository, UserRepository userRepository, CardService cardService, DeckCardRepository deckCardRepository) {
+    public GameService(GameRepository gameRepository, UserRepository userRepository, CardService cardService, DeckCardRepository deckCardRepository, CardsOnBoardRepository cardsOnBoardRepository) {
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
         this.cardService = cardService;
         this.deckCardRepository = deckCardRepository;
+        this.cardsOnBoardRepository = cardsOnBoardRepository;
     }
 
     public List<Game> getAllGames() {
@@ -58,7 +61,7 @@ public class GameService {
         }
     }
 
-    public Game startGame(Users user) {
+    public Game startNewGame(Users user) {
         Game game = new Game();
         game.setElapsed_time(0);
         game.setUsers(user);
@@ -70,7 +73,7 @@ public class GameService {
 
     @Transactional
     public GameInitDto startGameWithDeck(Users user) {
-        Game game = startGame(user);
+        Game game = startNewGame(user);
 
         List<Card> playingCards = cardService.getAllCardsShuffled();
 
@@ -95,4 +98,28 @@ public class GameService {
 
         return new GameInitDto(game.getGame_id(), deckCardDtos);
     }
+
+    public GameInitDto startGame(Long gameId) {
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow();
+
+        List<DeckCard> deckCards = deckCardRepository.getDeckCardsByGame(game);
+        List<CardsOnBoard> cardsOnBoard = cardsOnBoardRepository.getCardsOnBoardByGame(game);
+
+        List<DeckCardDto> cardsInDeck = deckCards.stream()
+                .map(DeckCardDto::new)
+                .toList();
+
+        List<DeckCardDto> boardCards = new ArrayList<>();
+
+        for (var boardCard : cardsOnBoard) {
+            boardCards.add(boardCard.getCard().convertToCardDto());
+        }
+
+        return new GameInitDto(
+                game.getGame_id(),
+                cardsInDeck,
+                boardCards);
+    }
+
 }

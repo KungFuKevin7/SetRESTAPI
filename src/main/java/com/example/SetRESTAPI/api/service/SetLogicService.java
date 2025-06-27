@@ -21,7 +21,7 @@ public class SetLogicService {
             System.out.println("Set "+ i);
             for (Card card : validSets.get(i)) {
                 System.out.println(
-                        card.getDisplayedAmount() + ", " +
+                        card.getDisplayed_amount() + ", " +
                         card.getShape() + ", " +
                         card.getTexture() + ", " +
                         card.getColour());
@@ -67,9 +67,9 @@ public class SetLogicService {
                         cardsToCheck.get(1).getColour(),
                         cardsToCheck.get(2).getColour())
                 &&
-                isCardPropertyValid((char)(cardsToCheck.get(0).getDisplayedAmount()+'0'),
-                        (char)(cardsToCheck.get(1).getDisplayedAmount()+'0'),
-                        (char)(cardsToCheck.get(2).getDisplayedAmount()+'0'));
+                isCardPropertyValid((char)(cardsToCheck.get(0).getDisplayed_amount()+'0'),
+                        (char)(cardsToCheck.get(1).getDisplayed_amount()+'0'),
+                        (char)(cardsToCheck.get(2).getDisplayed_amount()+'0'));
     }
 
     /// Check if a property of a set of cards is valid

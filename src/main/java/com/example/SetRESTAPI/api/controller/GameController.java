@@ -48,15 +48,21 @@ public class GameController {
 
     @PostMapping("/start-new")
     public ResponseEntity<Game> startNewGame(@AuthenticationPrincipal UserPrincipal user) {
-        Game startedGame = gameService.startGame(user.getUser());
+        Game startedGame = gameService.startNewGame(user.getUser());
         return new ResponseEntity<>(startedGame, HttpStatus.CREATED);
     }
 
-    @PostMapping("/start-game-with-deck")
+    @PostMapping("/start-new-with-deck")
     public ResponseEntity<GameInitDto> startNewGameWithDeck(@AuthenticationPrincipal UserPrincipal user)
     {
         GameInitDto gameInitDto = gameService.startGameWithDeck(user.getUser());
         return new ResponseEntity<>(gameInitDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/start/{gameId}")
+    public ResponseEntity<GameInitDto> startExistingGame(@AuthenticationPrincipal UserPrincipal user, @PathVariable Long gameId){
+        GameInitDto gameInitDto = gameService.startGame(gameId);
+        return new ResponseEntity<>(gameInitDto, HttpStatus.OK);
     }
 
     @PostMapping

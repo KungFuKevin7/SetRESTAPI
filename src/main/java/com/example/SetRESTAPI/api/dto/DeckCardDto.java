@@ -42,21 +42,22 @@ public class DeckCardDto {
 
     public DeckCardDto(DeckCard deckCard) {
         Card card = deckCard.getCard();
-        this.cardId = card.getCardId();
+        this.cardId = card.getCard_id();
         this.position = deckCard.getPosition();
         this.status = deckCard.getStatus();
         this.shape = card.getShape();
         this.colour = card.getColour();
         this.texture = card.getTexture();
-        this.displayed_amount = card.getDisplayedAmount();
-        this.card_img = card.getCardImg();
+        this.displayed_amount = card.getDisplayed_amount();
+        this.card_img = card.getCard_img();
         //this.game = deckCard.getGame();
     }
-    public DeckCardDto(int cardId, int position, String status, char shape, char colour, int displayed_amount, String card_img) {
+    public DeckCardDto(int cardId, int position, String status, char shape, char colour, int displayed_amount, char texture, String card_img) {
         this.cardId = cardId;
         this.position = position;
         this.status = status;
         this.shape = shape;
+        this.texture = texture;
         this.colour = colour;
         this.displayed_amount = displayed_amount;
         this.card_img = card_img;
@@ -65,8 +66,8 @@ public class DeckCardDto {
 
     public Card convertToCard() {
         Card card = new Card();
-        card.setCardId(this.cardId);
-        card.setDisplayedAmount(this.displayed_amount);
+        card.setCard_id(this.cardId);
+        card.setDisplayed_amount(this.displayed_amount);
         card.setShape(this.shape);
         card.setTexture(this.texture);
         card.setColour(this.colour);
@@ -74,6 +75,8 @@ public class DeckCardDto {
 
         return card;
     }
+
+
 
 
 

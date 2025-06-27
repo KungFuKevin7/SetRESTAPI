@@ -15,9 +15,18 @@ public class GameInitDto {
     @Setter
     private List<DeckCardDto> deckCards;
 
+    @Getter
+    @Setter
+    private List<DeckCardDto> cardsOnBoard;
+
     public GameInitDto(int gameId, List<DeckCardDto> deckCards) {
         this.gameId = gameId;
         this.deckCards = deckCards;
     }
 
+    public GameInitDto(int gameId, List<DeckCardDto> deckCards, List<DeckCardDto> cardsOnBoard) {
+        this.gameId = gameId;
+        this.deckCards = deckCards;
+        this.cardsOnBoard = cardsOnBoard;
+    }
 }

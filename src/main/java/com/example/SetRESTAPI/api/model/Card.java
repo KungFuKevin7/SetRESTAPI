@@ -1,8 +1,13 @@
 package com.example.SetRESTAPI.api.model;
 
+import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "Cards")
 public class Card {
 
@@ -34,50 +39,17 @@ public class Card {
     @Column
     private char colour;
 
-    public int getCardId() {
-        return this.card_id;
-    }
+    public DeckCardDto convertToCardDto(){
+        return new DeckCardDto(
+                card_id,
+                0,
+                "",
+                shape,
+                colour,
+                displayed_amount,
+                texture,
+                card_img
+        );
 
-    public void setCardId(int card_id) {
-        this.card_id = card_id;
-    }
-
-    public String getCardImg() {
-        return this.card_img;
-    }
-    public void setCard_img(String card_img) {
-        this.card_img = card_img;
-    }
-
-    public int getDisplayedAmount() {
-        return this.displayed_amount;
-    }
-
-    public void setDisplayedAmount(int displayed_amount) {
-        this.displayed_amount = displayed_amount;
-    }
-
-    public char getTexture() {
-        return this.texture;
-    }
-
-    public void setTexture(char texture) {
-        this.texture = texture;
-    }
-
-    public char getShape() {
-        return this.shape;
-    }
-
-    public void setShape(char shape) {
-        this.shape = shape;
-    }
-
-    public char getColour() {
-        return this.colour;
-    }
-
-    public void setColour(char colour) {
-        this.colour = colour;
     }
 }

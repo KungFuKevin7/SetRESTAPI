@@ -71,32 +71,57 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    /// This method needs a lot of reworking for the love of god.
     @Transactional
     public GameInitDto startGameWithDeck(Users user) {
         Game game = startNewGame(user);
 
-        List<Card> playingCards = cardService.getAllCardsShuffled();
+        //Shuffled Deck
+        List<Card> fullDeck = cardService.getAllCardsShuffled();
 
         List<DeckCard> deckCards = new ArrayList<>();
+        List<CardsOnBoard> cardsOnBoards = new ArrayList<>();
 
-        for (int i = 0; i < playingCards.size(); i++) {
+
+        for (int i = 0; i < fullDeck.size(); i++) {
             DeckCard deckCard = new DeckCard();
             deckCard.setPosition(i);
-            deckCard.setCard(playingCards.get(i));
+            deckCard.setCard(fullDeck.get(i));
             deckCard.setGame(game);
             deckCard.setStatus("In Playing Deck");
 
             deckCards.add(deckCard);
         }
 
-        deckCardRepository.saveAll(deckCards);
+        //Get Table
+        List<DeckCard> tableCards =  deckCards.subList(0,12);
+        //Remaining Deck
+        List<DeckCard> cardsInDeck = deckCards.subList(12, deckCards.size());
 
-        List<DeckCardDto> deckCardDtos = deckCards
+        for (DeckCard tableCard : tableCards) {
+            CardsOnBoard cardOnBoard = new CardsOnBoard();
+            cardOnBoard.setGame(game);
+            cardOnBoard.setCard(tableCard.getCard());
+            cardsOnBoards.add(cardOnBoard);
+        }
+
+        List<DeckCardDto> deckCardDto = cardsInDeck
                 .stream()
                 .map(DeckCardDto::new)
                 .toList();
 
-        return new GameInitDto(game.getGame_id(), deckCardDtos);
+        List<DeckCardDto> tableCardDto = tableCards
+                .stream()
+                .map(DeckCardDto::new)
+                .toList();
+
+        deckCardRepository.saveAll(deckCards);
+        cardsOnBoardRepository.saveAll(cardsOnBoards);
+
+        return new GameInitDto(
+                game.getGame_id(),
+                deckCardDto,
+                tableCardDto);
     }
 
     public GameInitDto startGame(Long gameId) {

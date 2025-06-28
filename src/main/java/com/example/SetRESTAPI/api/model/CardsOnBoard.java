@@ -4,20 +4,21 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Entity
-@Table(name = "CardsOnBoard")
+@Table(name = "Cards_On_Board")
 public class CardsOnBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int card_on_board_id;
 
+    @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name="card_id")
     private Card card;
 
+    @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name="game_id")

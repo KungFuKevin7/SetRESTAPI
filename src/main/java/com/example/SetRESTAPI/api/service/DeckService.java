@@ -11,11 +11,11 @@ import java.util.List;
 public class DeckService{
 
     private final CardRepository cardRepository;
-    private final SetLogicService setLogicService;
+    private final SetLogic setLogic;
 
-    public DeckService(CardRepository cardRepository, SetLogicService setLogicService) {
+    public DeckService(CardRepository cardRepository, SetLogic setLogic) {
         this.cardRepository = cardRepository;
-        this.setLogicService = setLogicService;
+        this.setLogic = setLogic;
     }
 
     public List<Card> getShuffledDeck() {

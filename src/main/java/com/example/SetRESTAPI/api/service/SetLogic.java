@@ -1,5 +1,8 @@
 package com.example.SetRESTAPI.api.service;
 
+import com.example.SetRESTAPI.api.dto.DeckCardDto;
+import com.example.SetRESTAPI.api.dto.SetDto;
+import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class SetLogicService {
+public class SetLogic {
 
     ///Find out whether the current playing table contains at least one set
     public List<List<Card>> FindSetOnTable(Card[] cardsOnTable){
@@ -52,7 +55,7 @@ public class SetLogicService {
     }
 
     ///Check if three cards make up a correct set
-    public boolean checkIfSet(List<Card> cardsToCheck){
+   public boolean checkIfSet(List<Card> cardsToCheck){
 
         //Check for each property if they are all equal or varying
         return isCardPropertyValid(cardsToCheck.get(0).getShape(),
@@ -70,6 +73,20 @@ public class SetLogicService {
                 isCardPropertyValid((char)(cardsToCheck.get(0).getDisplayed_amount()+'0'),
                         (char)(cardsToCheck.get(1).getDisplayed_amount()+'0'),
                         (char)(cardsToCheck.get(2).getDisplayed_amount()+'0'));
+    }
+
+    public SetResponseDto isValidSet(List<DeckCardDto> cardsToCheck){
+
+        SetResponseDto setResponse = new SetResponseDto();
+
+        List<Card> cards = new ArrayList<>();
+        for (DeckCardDto deckCardDto : cardsToCheck) {
+            cards.add(deckCardDto.convertToCard());
+        }
+
+        setResponse.setSetValid(checkIfSet(cards));
+
+        return setResponse;
     }
 
     /// Check if a property of a set of cards is valid

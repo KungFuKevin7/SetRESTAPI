@@ -1,7 +1,7 @@
 package com.example.SetRESTAPI.api.controller;
 
 import com.example.SetRESTAPI.api.model.Card;
-import com.example.SetRESTAPI.api.service.SetLogicService;
+import com.example.SetRESTAPI.api.service.SetLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,26 +14,26 @@ import java.util.Arrays;
 public class SetLogicController {
 
     @Autowired
-    private final SetLogicService setLogicService;
+    private final SetLogic setLogic;
 
-    public SetLogicController(SetLogicService setLogicService) {
-        this.setLogicService = setLogicService;
+    public SetLogicController(SetLogic setLogicService) {
+        this.setLogic = setLogicService;
     }
 
     //POST, since GET request oughtn't have a body
     @PostMapping()
     public boolean CheckSetValidity(@RequestBody Card[] cards) {
-        return setLogicService.checkIfSet(Arrays.stream(cards).toList());
+        return setLogic.checkIfSet(Arrays.stream(cards).toList());
     }
 
     @PostMapping("/on-table")
     public List<List<Card>> CheckIfSetOnTable(@RequestBody Card[] cardsOnTable) {
-        return setLogicService.FindSetOnTable(cardsOnTable);
+        return setLogic.FindSetOnTable(cardsOnTable);
     }
 
     @PostMapping("/hint")
     public List<Card> CheckIfSetHint(@RequestBody Card[] cardsOnTable) {
-        return setLogicService.getSetHint(cardsOnTable);
+        return setLogic.getSetHint(cardsOnTable);
     }
 
 }

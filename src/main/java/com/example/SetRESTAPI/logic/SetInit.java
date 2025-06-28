@@ -5,7 +5,8 @@ import com.example.SetRESTAPI.api.model.Card;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetLogic {
+public class SetInit {
+
 
     public enum Shape {
             w,  //Wave

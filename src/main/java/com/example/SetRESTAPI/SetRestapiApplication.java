@@ -1,9 +1,8 @@
 package com.example.SetRESTAPI;
 
-import com.example.SetRESTAPI.logic.SetLogic;
+import com.example.SetRESTAPI.logic.SetInit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 @SpringBootApplication
 public class SetRestapiApplication{
@@ -11,7 +10,7 @@ public class SetRestapiApplication{
 	public static void main(String[] args) {
 
 		//Get All Playing Cards
-		SetLogic SL = new SetLogic();
+		SetInit SL = new SetInit();
 		SL.insertPlayingCards();
 
 		SpringApplication.run(SetRestapiApplication.class, args);

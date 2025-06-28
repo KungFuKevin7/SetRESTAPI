@@ -5,19 +5,25 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Set")
-public class Set {
+@Table(name = "SetCard")
+public class SetCard {
 
     @Id
     @Getter
     @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int SetId;
+    private int SetCardId;
 
-
-    @ManyToOne
     @Getter
-    @JoinColumn(name="game_id")
-    private Game game;
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "card_id")
+    private Card Card;
+
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "set_id")
+    private Set Set;
 
 }

@@ -1,10 +1,11 @@
 package com.example.SetRESTAPI.api.service;
 
+import com.example.SetRESTAPI.api.dto.DeckCardDto;
+import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Card;
 import com.example.SetRESTAPI.api.model.Set;
 import com.example.SetRESTAPI.api.repository.CardRepository;
 import com.example.SetRESTAPI.api.repository.SetRepository;
-import com.example.SetRESTAPI.logic.SetLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ import java.util.Optional;
 public class SetService
 {
     private final SetRepository setRepository;
+
+    @Autowired
+    private SetLogic setLogic;
 
     @Autowired
     public SetService(SetRepository setRepository) {
@@ -29,8 +33,13 @@ public class SetService
         return setRepository.findById(id);
     }
 
-    public boolean checkSet(){
-        return true;
+    public SetResponseDto checkSet(List<DeckCardDto> cards){
+        SetResponseDto setValidity = this.setLogic.isValidSet(cards);
+        if (setValidity.isSetValid()){
+            //Database Store
+        }
+
+        return setValidity;
     }
 
     public List<Set> addSet(List<Set> set){

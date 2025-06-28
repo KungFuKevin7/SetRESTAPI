@@ -2,11 +2,8 @@ package com.example.SetRESTAPI.api.service;
 
 import com.example.SetRESTAPI.api.model.Card;
 import com.example.SetRESTAPI.api.repository.CardRepository;
-import com.example.SetRESTAPI.logic.SetLogic;
+import com.example.SetRESTAPI.logic.SetInit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Limit;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,14 +11,12 @@ import java.util.*;
 @Service
 public class CardService {
 
-    private final CardRepository cardRepository;
-    private final SetLogicService setLogicService;
+    @Autowired
+    private CardRepository cardRepository;
+
 
     @Autowired
-    public CardService(CardRepository cardRepository, SetLogicService setLogicService) {
-        this.cardRepository = cardRepository;
-        this.setLogicService = setLogicService;
-    }
+    private SetLogic setLogic;
 
     public List<Card> getAllCards() {
         return cardRepository.findAll();
@@ -38,7 +33,7 @@ public class CardService {
 
         do{
             shuffledTableCards = cardRepository.getRandomTableCards();
-        } while (setLogicService.FindSetOnTable(shuffledTableCards.toArray(new Card[0])).isEmpty());
+        } while (setLogic.FindSetOnTable(shuffledTableCards.toArray(new Card[0])).isEmpty());
 
         ///DB Call to add cards to db
         return shuffledTableCards;
@@ -53,7 +48,7 @@ public class CardService {
     }
 
     public List<Card> addPlayingCards() {
-        var cards = new SetLogic().insertPlayingCards();
+        var cards = new SetInit().insertPlayingCards();
         return cardRepository.saveAll(cards);
     }
 

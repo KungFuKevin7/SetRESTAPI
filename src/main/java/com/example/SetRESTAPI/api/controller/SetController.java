@@ -53,7 +53,7 @@ public class SetController {
     @PostMapping("/validate-for-game/{gameId}")
     public ResponseEntity<SetResponseDto> validateSet(@RequestBody List<DeckCardDto> cards, @PathVariable int gameId){
 
-        SetResponseDto set = setService.checkSet(cards);
+        SetResponseDto set = setService.validateAndSaveSet(cards, gameId);
 
         if(set.isSetValid()){
             return ResponseEntity.ok(set);

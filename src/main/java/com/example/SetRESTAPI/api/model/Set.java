@@ -17,6 +17,7 @@ public class Set {
 
     @ManyToOne
     @Getter
+    @Setter
     @JoinColumn(name="game_id")
     private Game game;
 

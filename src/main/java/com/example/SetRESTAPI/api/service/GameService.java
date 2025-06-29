@@ -4,6 +4,7 @@ import aj.org.objectweb.asm.commons.Remapper;
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.GameInitDto;
 import com.example.SetRESTAPI.api.model.*;
+import com.example.SetRESTAPI.api.publics.CardStatus;
 import com.example.SetRESTAPI.api.publics.GameStatus;
 import com.example.SetRESTAPI.api.repository.CardsOnBoardRepository;
 import com.example.SetRESTAPI.api.repository.DeckCardRepository;
@@ -88,7 +89,7 @@ public class GameService {
             deckCard.setPosition(i);
             deckCard.setCard(fullDeck.get(i));
             deckCard.setGame(game);
-            deckCard.setStatus("In Playing Deck");
+            deckCard.setStatus(CardStatus.inCardDeck);
 
             deckCards.add(deckCard);
         }
@@ -97,6 +98,14 @@ public class GameService {
         List<DeckCard> tableCards =  deckCards.subList(0,12);
         //Remaining Deck
         List<DeckCard> cardsInDeck = deckCards.subList(12, deckCards.size());
+
+        for (DeckCard deckCard : deckCards) {
+            for (DeckCard cardOnTable : tableCards) {
+                if (deckCard.getCard().equals(cardOnTable.getCard())) {
+                    deckCard.setStatus(CardStatus.onTable);
+                }
+            }
+        }
 
         for (DeckCard tableCard : tableCards) {
             CardsOnBoard cardOnBoard = new CardsOnBoard();

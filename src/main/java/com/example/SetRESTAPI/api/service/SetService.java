@@ -2,14 +2,9 @@ package com.example.SetRESTAPI.api.service;
 
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
-import com.example.SetRESTAPI.api.model.Card;
-import com.example.SetRESTAPI.api.model.Game;
-import com.example.SetRESTAPI.api.model.Set;
-import com.example.SetRESTAPI.api.model.SetCard;
-import com.example.SetRESTAPI.api.repository.CardRepository;
-import com.example.SetRESTAPI.api.repository.GameRepository;
-import com.example.SetRESTAPI.api.repository.SetCardRepository;
-import com.example.SetRESTAPI.api.repository.SetRepository;
+import com.example.SetRESTAPI.api.model.*;
+import com.example.SetRESTAPI.api.publics.CardStatus;
+import com.example.SetRESTAPI.api.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +23,8 @@ public class SetService
     private SetLogic setLogic;
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private DeckCardService deckCardService;
 
     @Autowired
     public SetService(SetRepository setRepository) {
@@ -49,12 +46,21 @@ public class SetService
 
             Set set = addSet(gameId);
             addSetCard(cards, set);
+
+ /*           for (DeckCardDto card : cards){
+
+            }*/
+
+            deckCardService.updateDeckCardStatus(
+                    gameRepository.findById((long)gameId).orElseThrow(),
+                    cards,
+                    CardStatus.inFoundSet);
         }
 
         return setValidity;
     }
 
-    public Set addSet( int gameId) {
+    public Set addSet(int gameId) {
 
         Game game = gameRepository.findById((long)gameId).orElse(null);
 

@@ -1,5 +1,6 @@
 package com.example.SetRESTAPI.api.service;
 
+import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.model.Card;
 import com.example.SetRESTAPI.api.model.DeckCard;
 import com.example.SetRESTAPI.api.model.Game;
@@ -20,5 +21,22 @@ public class DeckCardService {
     public List<DeckCard> getDeckCards(Game game)
     {
         return deckCardRepository.getDeckCardsByGame(game);
+    }
+
+    public void updateDeckCardStatus(Game game, List<DeckCardDto> cards, String Status){
+        List<DeckCard> deckCards = getDeckCards(game);
+
+        for (DeckCard deckCard : deckCards) {
+            for(DeckCardDto card : cards) {
+                if (deckCard.getCard().getCard_id() == card.convertToCard().getCard_id()){
+
+                    DeckCard itemToUpdate = deckCardRepository.findById((long)deckCard.getDeckCardId())
+                            .orElseThrow();
+
+                    itemToUpdate.setStatus(Status);
+                    deckCardRepository.save(itemToUpdate);
+                }
+            }
+        }
     }
 }

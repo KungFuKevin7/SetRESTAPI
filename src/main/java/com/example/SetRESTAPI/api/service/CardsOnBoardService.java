@@ -31,7 +31,7 @@ public class CardsOnBoardService {
     }
 
     //Gets cards by Game Id, NOT by CardsOnBoardId
-    public List<CardsOnBoard> getCardsOnBoardByGameId(Game game) {
+    public List<CardsOnBoard> getCardsOnBoardByGame(Game game) {
         return cardsOnBoardRepository.getCardsOnBoardByGame(game);
     }
 

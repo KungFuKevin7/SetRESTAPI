@@ -30,9 +30,9 @@ public class CardsOnBoardController {
         return cardsOnBoardService.getAllCardsOnBoard();
     }
 
-    @GetMapping("/by-game-id")
+    @GetMapping("/by-game")
     public List<CardsOnBoard> getCardsOnBoardByGameId(@RequestBody Game game){
-        return cardsOnBoardService.getCardsOnBoardByGameId(game);
+        return cardsOnBoardService.getCardsOnBoardByGame(game);
     }
 
     @PostMapping

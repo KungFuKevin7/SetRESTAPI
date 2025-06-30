@@ -25,8 +25,7 @@ public class CardController{
 
     @GetMapping("/shuffled")
     public List<Card> getTableCards(){
-        System.out.println("Owhh that tickles!");
-        return cardService.getShuffledTableCards();
+        return cardService.getShuffledBoardCards();
     }
 
     @GetMapping("/{id}")

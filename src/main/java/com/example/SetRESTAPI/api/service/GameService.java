@@ -28,14 +28,16 @@ public class GameService {
     private final CardService cardService;
     private final DeckCardRepository deckCardRepository;
     private final CardsOnBoardRepository cardsOnBoardRepository;
+    private final SetLogic setLogic;
 
     @Autowired
-    public GameService(GameRepository gameRepository, UserRepository userRepository, CardService cardService, DeckCardRepository deckCardRepository, CardsOnBoardRepository cardsOnBoardRepository) {
+    public GameService(GameRepository gameRepository, UserRepository userRepository, CardService cardService, DeckCardRepository deckCardRepository, CardsOnBoardRepository cardsOnBoardRepository, SetLogic setLogic) {
         this.gameRepository = gameRepository;
         this.userRepository = userRepository;
         this.cardService = cardService;
         this.deckCardRepository = deckCardRepository;
         this.cardsOnBoardRepository = cardsOnBoardRepository;
+        this.setLogic = setLogic;
     }
 
     public List<Game> getAllGames() {
@@ -78,26 +80,42 @@ public class GameService {
         Game game = startNewGame(user);
 
         //Shuffled Deck
-        List<Card> fullDeck = cardService.getAllCardsShuffled();
+        List<Card> fullDeck;
 
         List<DeckCard> deckCards = new ArrayList<>();
         List<CardsOnBoard> cardsOnBoards = new ArrayList<>();
 
+        List<Card> cardsOnBoard =  new ArrayList<>();
+        List<DeckCard> tableCards;
 
-        for (int i = 0; i < fullDeck.size(); i++) {
-            DeckCard deckCard = new DeckCard();
-            deckCard.setPosition(i);
-            deckCard.setCard(fullDeck.get(i));
-            deckCard.setGame(game);
-            deckCard.setStatus(CardStatus.inCardDeck);
+        do {
+            fullDeck = cardService.getShuffledBoardCards();
 
-            deckCards.add(deckCard);
-        }
+            for (int i = 0; i < fullDeck.size(); i++) {
+                DeckCard deckCard = new DeckCard();
+                deckCard.setPosition(i);
+                deckCard.setCard(fullDeck.get(i));
+                deckCard.setGame(game);
+                deckCard.setStatus(CardStatus.inCardDeck);
 
-        //Get Table
-        List<DeckCard> tableCards =  deckCards.subList(0,12);
+                deckCards.add(deckCard);
+            }
+
+            //Get Table
+            tableCards = deckCards.subList(0, 12);
+
+
+            for (DeckCard tableCard : tableCards) {
+                cardsOnBoard.add(tableCard.getCard());
+            }
+
+        } while(setLogic.FindSetOnTable(
+                cardsOnBoard.toArray(new Card[0])).isEmpty());
+
         //Remaining Deck
         List<DeckCard> cardsInDeck = deckCards.subList(12, deckCards.size());
+
+
 
         for (DeckCard deckCard : deckCards) {
             for (DeckCard cardOnTable : tableCards) {

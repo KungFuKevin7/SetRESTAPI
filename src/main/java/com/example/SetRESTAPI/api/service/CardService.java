@@ -22,7 +22,7 @@ public class CardService {
         return cardRepository.findAll();
     }
 
-    public List<Card> getAllCardsShuffled() {
+    public List<Card> getShuffledBoardCards() {
         List<Card> cards = cardRepository.findAll();
         Collections.shuffle(cards);
         return cards;
@@ -33,7 +33,8 @@ public class CardService {
 
         do{
             shuffledTableCards = cardRepository.getRandomTableCards();
-        } while (setLogic.FindSetOnTable(shuffledTableCards.toArray(new Card[0])).isEmpty());
+        } while (setLogic.FindSetOnTable(shuffledTableCards.toArray(new Card[0]))
+                .isEmpty());
 
         ///DB Call to add cards to db
         return shuffledTableCards;

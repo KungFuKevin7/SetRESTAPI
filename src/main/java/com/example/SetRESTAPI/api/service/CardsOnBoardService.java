@@ -60,6 +60,14 @@ public class CardsOnBoardService {
         return cardsOnBoardRepository.saveAll(cardOnBoardItems);
     }
 
+
+    @Transactional
+    public List<CardsOnBoard> replaceCardsOnBoard(List<DeckCardDto> cardsOnBoard, int gameId) {
+        cardsOnBoardRepository.deleteCardsOnBoard(gameId);
+
+        return addCardsOnBoard(cardsOnBoard, gameId);
+    }
+
     //Removes a single card from the board
     public void deleteCardsOnBoard(Long Id) {
         if (cardsOnBoardRepository.existsById(Id)){
@@ -69,7 +77,7 @@ public class CardsOnBoardService {
         }
     }
 
-    //Removes a set, when user found a set
+/*    //Removes a set, when user found a set
     public void deleteSetOnBoard(List<Long> foundSetIds) {
         // If cards were found, delete Set
         if (!cardsOnBoardRepository.findAllById(foundSetIds).isEmpty()) {
@@ -77,6 +85,6 @@ public class CardsOnBoardService {
         } else{
             throw new RuntimeException("Set could not be deleted");
         }
-    }
+    }*/
 
 }

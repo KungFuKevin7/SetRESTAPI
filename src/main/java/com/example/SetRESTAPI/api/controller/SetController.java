@@ -2,8 +2,11 @@ package com.example.SetRESTAPI.api.controller;
 
 
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
+import com.example.SetRESTAPI.api.dto.GameInitDto;
+import com.example.SetRESTAPI.api.dto.SetDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Card;
+import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.model.Set;
 import com.example.SetRESTAPI.api.service.CardService;
 import com.example.SetRESTAPI.api.service.SetLogic;
@@ -60,6 +63,12 @@ public class SetController {
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(set);
         }
+    }
+
+    @PostMapping("/handle-new-cards/{gameId}")
+    public ResponseEntity<GameInitDto> test(@RequestBody List<DeckCardDto> foundsSetCards, @PathVariable int gameId){
+        GameInitDto gameInitDto = setService.handleNewBoard(gameId, foundsSetCards);
+        return ResponseEntity.ok(gameInitDto);
     }
 
 }

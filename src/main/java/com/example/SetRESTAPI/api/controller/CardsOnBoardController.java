@@ -53,9 +53,9 @@ public class CardsOnBoardController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete-set")
+/*    @DeleteMapping("/delete-set")
     public ResponseEntity<Void> deleteSetfromBoard(@RequestBody List<Long> cardIds){
         cardsOnBoardService.deleteSetOnBoard(cardIds);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 }

@@ -4,6 +4,9 @@ import com.example.SetRESTAPI.api.model.DeckCard;
 import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.model.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,4 +14,7 @@ import java.util.List;
 @Repository
 public interface DeckCardRepository extends JpaRepository<DeckCard, Long> {
     List<DeckCard> getDeckCardsByGame(Game game);
+
+    @Query(nativeQuery = true, value="SELECT * FROM deck_card WHERE deck_card.game_id=:gameId AND deck_card.status='In Deck'")
+    List<DeckCard> getDeckCardsInDeckByGame(@Param("gameId") Integer gameId);
 }

@@ -3,17 +3,11 @@ package com.example.SetRESTAPI.api.controller;
 
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.GameInitDto;
-import com.example.SetRESTAPI.api.dto.SetDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
-import com.example.SetRESTAPI.api.model.Card;
-import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.model.Set;
-import com.example.SetRESTAPI.api.service.CardService;
-import com.example.SetRESTAPI.api.service.SetLogic;
 import com.example.SetRESTAPI.api.service.SetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -6,6 +6,7 @@ import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.*;
 import com.example.SetRESTAPI.api.publics.CardStatus;
 import com.example.SetRESTAPI.api.repository.*;
+import com.example.SetRESTAPI.logic.SetLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class SetService
@@ -142,7 +141,10 @@ public class SetService
 
     public GameInitDto handleNewBoard(int gameId, List<DeckCardDto> foundSetCards) {
 
-        validateAndSaveSet(foundSetCards, gameId);
+        SetResponseDto setValidity = validateAndSaveSet(foundSetCards, gameId);
+        if (!setValidity.isSetValid()){
+            return new GameInitDto(gameId, new ArrayList<>());
+        }
 
         Game game = gameRepository.findById((long)gameId).orElseThrow();
         List<DeckCard> deckCards = deckCardService.getDeckCardsInDeckId(game);
@@ -155,7 +157,8 @@ public class SetService
         removeCardsFromBoard(game, foundSetCards);
         List<DeckCardDto> newTable = getNewCardsOnBoard(game, deckCardDtos);
 
-        return new GameInitDto(game.getGame_id(), deckCardDtos, newTable);
+
+        return new GameInitDto(gameId, deckCardDtos, newTable);
     }
 
     public Set addSet(int gameId) {

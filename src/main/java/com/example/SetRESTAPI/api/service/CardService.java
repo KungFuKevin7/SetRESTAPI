@@ -3,6 +3,7 @@ package com.example.SetRESTAPI.api.service;
 import com.example.SetRESTAPI.api.model.Card;
 import com.example.SetRESTAPI.api.repository.CardRepository;
 import com.example.SetRESTAPI.logic.SetInit;
+import com.example.SetRESTAPI.logic.SetLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

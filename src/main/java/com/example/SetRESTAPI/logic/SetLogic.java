@@ -1,10 +1,8 @@
-package com.example.SetRESTAPI.api.service;
+package com.example.SetRESTAPI.logic;
 
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
-import com.example.SetRESTAPI.api.dto.SetDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Card;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,6 +73,25 @@ public class SetLogic {
                         (char)(cardsToCheck.get(2).getDisplayed_amount()+'0'));
     }
 
+    /// Get all possible combinations from a deck
+    public List<List<DeckCardDto>> generatePossibilities(List<DeckCardDto> deck, int amount){
+       List<List<DeckCardDto>> combinations = new ArrayList<>();
+       backtrack(deck, new ArrayList<>(), 0, amount, combinations);
+       return combinations;
+   }
+
+    private void backtrack(List<DeckCardDto> deck, List<DeckCardDto> temp, int start, int k, List<List<DeckCardDto>> result) {
+        if (temp.size() == k) {
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+        for (int i = start; i < deck.size(); i++) {
+            temp.add(deck.get(i));
+            backtrack(deck, temp, i + 1, k, result);
+            temp.removeLast();
+        }
+    }
+
     public SetResponseDto isValidSet(List<DeckCardDto> cardsToCheck){
 
         SetResponseDto setResponse = new SetResponseDto();
@@ -108,6 +125,7 @@ public class SetLogic {
         return false;
     }
 
+    /// Get a hint from the cards displayed on table
     public List<Card> getSetHint(Card[] cardsOnTable){
         List<List<Card>> allSets = FindSetOnTable(cardsOnTable);
 

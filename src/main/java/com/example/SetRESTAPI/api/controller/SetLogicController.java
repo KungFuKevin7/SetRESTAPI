@@ -1,7 +1,7 @@
 package com.example.SetRESTAPI.api.controller;
 
 import com.example.SetRESTAPI.api.model.Card;
-import com.example.SetRESTAPI.api.service.SetLogic;
+import com.example.SetRESTAPI.logic.SetLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

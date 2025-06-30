@@ -1,6 +1,5 @@
 package com.example.SetRESTAPI.api.service;
 
-import aj.org.objectweb.asm.commons.Remapper;
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.GameInitDto;
 import com.example.SetRESTAPI.api.model.*;
@@ -10,15 +9,14 @@ import com.example.SetRESTAPI.api.repository.CardsOnBoardRepository;
 import com.example.SetRESTAPI.api.repository.DeckCardRepository;
 import com.example.SetRESTAPI.api.repository.GameRepository;
 import com.example.SetRESTAPI.api.repository.UserRepository;
+import com.example.SetRESTAPI.logic.SetLogic;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class GameService {

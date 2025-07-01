@@ -14,6 +14,10 @@ public class CardsOnBoard {
 
     @Getter
     @Setter
+    private int boardPosition;
+
+    @Getter
+    @Setter
     @ManyToOne
     @JoinColumn(name="card_id")
     private Card card;

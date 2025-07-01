@@ -1,7 +1,8 @@
 package com.example.SetRESTAPI.api.service;
 
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
-import com.example.SetRESTAPI.api.dto.GameInitDto;
+import com.example.SetRESTAPI.api.dto.GameStateDto;
+import com.example.SetRESTAPI.api.dto.GameStatsDto;
 import com.example.SetRESTAPI.api.model.*;
 import com.example.SetRESTAPI.api.publics.CardStatus;
 import com.example.SetRESTAPI.api.publics.GameStatus;
@@ -23,6 +24,8 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final UserRepository userRepository;
+    @Autowired
+    private GameStatsDtoService gameStatsDtoService;
     private final CardService cardService;
     private final DeckCardRepository deckCardRepository;
     private final CardsOnBoardRepository cardsOnBoardRepository;
@@ -74,7 +77,7 @@ public class GameService {
 
     /// This method needs a lot of reworking for the love of god.
     @Transactional
-    public GameInitDto startGameWithDeck(Users user) {
+    public GameStateDto startGameWithDeck(Users user) {
         Game game = startNewGame(user);
 
         //Shuffled Deck
@@ -123,8 +126,10 @@ public class GameService {
             }
         }
 
-        for (DeckCard tableCard : tableCards) {
+        for (int i = 0; i < tableCards.size(); i++) {
+            DeckCard tableCard = tableCards.get(i);
             CardsOnBoard cardOnBoard = new CardsOnBoard();
+            cardOnBoard.setBoardPosition(i);
             cardOnBoard.setGame(game);
             cardOnBoard.setCard(tableCard.getCard());
             cardsOnBoards.add(cardOnBoard);
@@ -143,18 +148,21 @@ public class GameService {
         deckCardRepository.saveAll(deckCards);
         cardsOnBoardRepository.saveAll(cardsOnBoards);
 
-        return new GameInitDto(
+        return new GameStateDto(
                 game.getGame_id(),
                 deckCardDto,
-                tableCardDto);
+                tableCardDto,
+                gameStatsDtoService.getGameStatsDto(game.getGame_id())
+                );
     }
 
-    public GameInitDto startGame(Long gameId) {
+    public GameStateDto startGame(Long gameId) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow();
 
         List<DeckCard> deckCards = deckCardRepository.getDeckCardsByGame(game);
-        List<CardsOnBoard> cardsOnBoard = cardsOnBoardRepository.getCardsOnBoardByGame(game);
+        List<CardsOnBoard> cardsOnBoard = cardsOnBoardRepository.getCardsOnBoardByGame(game,
+                Sort.by(Sort.Direction.ASC, "boardPosition"));
 
         List<DeckCardDto> cardsInDeck = deckCards.stream()
                 .map(DeckCardDto::new)
@@ -166,10 +174,12 @@ public class GameService {
             boardCards.add(boardCard.getCard().convertToCardDto());
         }
 
-        return new GameInitDto(
+
+        return new GameStateDto(
                 game.getGame_id(),
                 cardsInDeck,
-                boardCards);
+                boardCards,
+                gameStatsDtoService.getGameStatsDto(game.getGame_id()));
     }
 
 }

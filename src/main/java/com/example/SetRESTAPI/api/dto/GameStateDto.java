@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-public class GameInitDto {
+public class GameStateDto {
 
     @Getter
     @Setter
@@ -19,14 +19,23 @@ public class GameInitDto {
     @Setter
     private List<DeckCardDto> cardsOnBoard;
 
-    public GameInitDto(int gameId, List<DeckCardDto> deckCards) {
+    @Getter
+    @Setter
+    private GameStatsDto gameStats;
+
+/*    @Getter
+    @Setter
+    private List<List<DeckCardDto>> possibleSets;*/
+
+    public GameStateDto(int gameId, List<DeckCardDto> deckCards) {
         this.gameId = gameId;
         this.deckCards = deckCards;
     }
 
-    public GameInitDto(int gameId, List<DeckCardDto> deckCards, List<DeckCardDto> cardsOnBoard) {
+    public GameStateDto(int gameId, List<DeckCardDto> deckCards, List<DeckCardDto> cardsOnBoard, GameStatsDto gameStats) {
         this.gameId = gameId;
         this.deckCards = deckCards;
         this.cardsOnBoard = cardsOnBoard;
+        this.gameStats = gameStats;
     }
 }

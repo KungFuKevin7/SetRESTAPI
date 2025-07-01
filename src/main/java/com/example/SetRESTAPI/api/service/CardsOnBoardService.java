@@ -8,6 +8,7 @@ import com.example.SetRESTAPI.api.repository.CardsOnBoardRepository;
 import com.example.SetRESTAPI.api.repository.GameRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,9 +31,8 @@ public class CardsOnBoardService {
         return cardsOnBoardRepository.findAll();
     }
 
-    //Gets cards by Game Id, NOT by CardsOnBoardId
     public List<CardsOnBoard> getCardsOnBoardByGame(Game game) {
-        return cardsOnBoardRepository.getCardsOnBoardByGame(game);
+        return cardsOnBoardRepository.getCardsOnBoardByGame(game, Sort.by(Sort.Direction.ASC, "boardPosition"));
     }
 
     public CardsOnBoard addCardsOnBoard(CardsOnBoard cardsOnBoard) {
@@ -49,12 +49,12 @@ public class CardsOnBoardService {
 
         List<CardsOnBoard> cardOnBoardItems = new ArrayList<>();
 
-        for (var card : cardsOnBoard) {
-            CardsOnBoard cardsOnBoardItem = new CardsOnBoard();
+        for (int i = 0; i < cardsOnBoard.size(); i++) {
+            CardsOnBoard cardsOnBoardItem = cardOnBoardItems.get(i);
+            cardsOnBoardItem.setBoardPosition(i);
             cardsOnBoardItem.setGame(game);
-            cardsOnBoardItem.setCard(card.convertToCard());
+            cardsOnBoardItem.setCard(cardsOnBoardItem.getCard());
             cardOnBoardItems.add(cardsOnBoardItem);
-
         }
 
         return cardsOnBoardRepository.saveAll(cardOnBoardItems);
@@ -76,15 +76,4 @@ public class CardsOnBoardService {
             throw new RuntimeException("CardsOnBoard Item does not exist");
         }
     }
-
-/*    //Removes a set, when user found a set
-    public void deleteSetOnBoard(List<Long> foundSetIds) {
-        // If cards were found, delete Set
-        if (!cardsOnBoardRepository.findAllById(foundSetIds).isEmpty()) {
-            cardsOnBoardRepository.deleteSet(foundSetIds);
-        } else{
-            throw new RuntimeException("Set could not be deleted");
-        }
-    }*/
-
 }

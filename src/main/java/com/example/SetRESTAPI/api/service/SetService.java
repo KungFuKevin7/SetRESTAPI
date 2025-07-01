@@ -1,13 +1,14 @@
 package com.example.SetRESTAPI.api.service;
 
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
-import com.example.SetRESTAPI.api.dto.GameInitDto;
+import com.example.SetRESTAPI.api.dto.GameStateDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.*;
 import com.example.SetRESTAPI.api.publics.CardStatus;
 import com.example.SetRESTAPI.api.repository.*;
 import com.example.SetRESTAPI.logic.SetLogic;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class SetService
     private CardsOnBoardService cardsOnBoardService;
     @Autowired
     private CardsOnBoardRepository cardsOnBoardRepository;
+    @Autowired
+    private GameStatsDtoService gameStatsDtoService;
 
     @Autowired
     public SetService(SetRepository setRepository) {
@@ -108,7 +111,8 @@ public class SetService
                 List<DeckCardDto> subList = cardsInDeck.subList(index, index + 3);
 
                 //Get Remaining 9 cards in deck
-                List<CardsOnBoard> remainingBoardCards = cardsOnBoardRepository.getCardsOnBoardByGame(game);
+                List<CardsOnBoard> remainingBoardCards = cardsOnBoardRepository.getCardsOnBoardByGame(
+                        game, Sort.by(Sort.Direction.ASC, "boardPosition"));
 
                 //Convert to Dto
                 List<DeckCardDto> remainingBoardCard = new ArrayList<>();
@@ -139,15 +143,15 @@ public class SetService
         return newBoard;
     }
 
-    public GameInitDto handleNewBoard(int gameId, List<DeckCardDto> foundSetCards) {
+    public GameStateDto handleNewBoard(int gameId, List<DeckCardDto> foundSetCards) {
 
         SetResponseDto setValidity = validateAndSaveSet(foundSetCards, gameId);
         if (!setValidity.isSetValid()){
-            return new GameInitDto(gameId, new ArrayList<>());
+            return new GameStateDto(gameId, new ArrayList<>());
         }
 
         Game game = gameRepository.findById((long)gameId).orElseThrow();
-        List<DeckCard> deckCards = deckCardService.getDeckCardsInDeckId(game);
+        List<DeckCard> deckCards = deckCardService.getDeckCardsInDeck(game);
 
         List<DeckCardDto> deckCardDtos = new ArrayList<>();
         for (DeckCard deckCard : deckCards){
@@ -157,8 +161,10 @@ public class SetService
         removeCardsFromBoard(game, foundSetCards);
         List<DeckCardDto> newTable = getNewCardsOnBoard(game, deckCardDtos);
 
-
-        return new GameInitDto(gameId, deckCardDtos, newTable);
+        return new GameStateDto(gameId,
+                deckCardDtos,
+                newTable,
+                gameStatsDtoService.getGameStatsDto(gameId));
     }
 
     public Set addSet(int gameId) {

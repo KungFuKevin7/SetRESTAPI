@@ -4,6 +4,7 @@ import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.model.CardsOnBoard;
 import com.example.SetRESTAPI.api.model.Game;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,7 @@ import java.util.List;
 @Repository
 public interface CardsOnBoardRepository extends JpaRepository<CardsOnBoard, Long> {
 
-    List<CardsOnBoard> getCardsOnBoardByGame(Game game);
+    List<CardsOnBoard> getCardsOnBoardByGame(Game game, Sort sort);
 
     @Transactional
     @Modifying

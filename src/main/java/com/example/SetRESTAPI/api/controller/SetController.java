@@ -2,7 +2,7 @@ package com.example.SetRESTAPI.api.controller;
 
 
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
-import com.example.SetRESTAPI.api.dto.GameInitDto;
+import com.example.SetRESTAPI.api.dto.GameStateDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Set;
 import com.example.SetRESTAPI.api.service.SetService;
@@ -60,9 +60,9 @@ public class SetController {
     }
 
     @PostMapping("/handle-new-cards/{gameId}")
-    public ResponseEntity<GameInitDto> test(@RequestBody List<DeckCardDto> foundsSetCards, @PathVariable int gameId){
-        GameInitDto gameInitDto = setService.handleNewBoard(gameId, foundsSetCards);
-        return ResponseEntity.ok(gameInitDto);
+    public ResponseEntity<GameStateDto> handelNewCards(@RequestBody List<DeckCardDto> foundsSetCards, @PathVariable int gameId){
+        GameStateDto gameStateDto = setService.handleNewBoard(gameId, foundsSetCards);
+        return ResponseEntity.ok(gameStateDto);
     }
 
 }

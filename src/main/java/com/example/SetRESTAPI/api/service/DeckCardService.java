@@ -40,7 +40,7 @@ public class DeckCardService {
         }
     }
 
-    public List<DeckCard> getDeckCardsInDeckId(Game game){
+    public List<DeckCard> getDeckCardsInDeck(Game game){
         return deckCardRepository.getDeckCardsInDeckByGame(game.getGame_id());
     }
 }

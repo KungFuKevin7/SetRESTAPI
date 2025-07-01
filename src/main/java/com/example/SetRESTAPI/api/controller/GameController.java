@@ -4,7 +4,7 @@ package com.example.SetRESTAPI.api.controller;
 import java.util.List;
 
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
-import com.example.SetRESTAPI.api.dto.GameInitDto;
+import com.example.SetRESTAPI.api.dto.GameStateDto;
 import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.model.Set;
 import com.example.SetRESTAPI.api.model.UserPrincipal;
@@ -53,16 +53,16 @@ public class GameController {
     }
 
     @PostMapping("/start-new-with-deck")
-    public ResponseEntity<GameInitDto> startNewGameWithDeck(@AuthenticationPrincipal UserPrincipal user)
+    public ResponseEntity<GameStateDto> startNewGameWithDeck(@AuthenticationPrincipal UserPrincipal user)
     {
-        GameInitDto gameInitDto = gameService.startGameWithDeck(user.getUser());
-        return new ResponseEntity<>(gameInitDto, HttpStatus.CREATED);
+        GameStateDto gameStateDto = gameService.startGameWithDeck(user.getUser());
+        return new ResponseEntity<>(gameStateDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/start/{gameId}")
-    public ResponseEntity<GameInitDto> startExistingGame(@AuthenticationPrincipal UserPrincipal user, @PathVariable Long gameId){
-        GameInitDto gameInitDto = gameService.startGame(gameId);
-        return new ResponseEntity<>(gameInitDto, HttpStatus.OK);
+    public ResponseEntity<GameStateDto> startExistingGame(@AuthenticationPrincipal UserPrincipal user, @PathVariable Long gameId){
+        GameStateDto gameStateDto = gameService.startGame(gameId);
+        return new ResponseEntity<>(gameStateDto, HttpStatus.OK);
     }
 
     @PostMapping

@@ -1,5 +1,6 @@
 package com.example.SetRESTAPI.api.service;
 
+import com.example.SetRESTAPI.api.converter.*;
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.GameStateDto;
 import com.example.SetRESTAPI.api.dto.GameStatsDto;
@@ -105,18 +106,13 @@ public class GameService {
             //Get Table
             tableCards = deckCards.subList(0, 12);
 
-
-            for (DeckCard tableCard : tableCards) {
-                cardsOnBoard.add(tableCard.getCard());
-            }
+            cardsOnBoard = new DeckCardToCardConverter().convertList(tableCards);
 
         } while(setLogic.FindSetOnTable(
                 cardsOnBoard.toArray(new Card[0])).isEmpty());
 
         //Remaining Deck
         List<DeckCard> cardsInDeck = deckCards.subList(12, deckCards.size());
-
-
 
         for (DeckCard deckCard : deckCards) {
             for (DeckCard cardOnTable : tableCards) {
@@ -168,11 +164,7 @@ public class GameService {
                 .map(DeckCardDto::new)
                 .toList();
 
-        List<DeckCardDto> boardCards = new ArrayList<>();
-
-        for (var boardCard : cardsOnBoard) {
-            boardCards.add(boardCard.getCard().convertToCardDto());
-        }
+        List<DeckCardDto> boardCards = new CardsOnBoardConverter().convertList(cardsOnBoard);
 
 
         return new GameStateDto(

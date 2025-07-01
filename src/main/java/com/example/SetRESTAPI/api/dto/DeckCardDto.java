@@ -63,7 +63,7 @@ public class DeckCardDto {
         this.card_img = card_img;
         //this.game = deckCard.getGame();
     }
-
+/*
     public Card convertToCard() {
         Card card = new Card();
         card.setCard_id(this.cardId);
@@ -74,10 +74,6 @@ public class DeckCardDto {
         card.setCard_img(this.card_img);
 
         return card;
-    }
-
-
-
-
+    }*/
 
 }

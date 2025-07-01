@@ -14,5 +14,9 @@ public class SetDto {
 
     @Getter
     @Setter
+    private int setNumber;
+
+    @Getter
+    @Setter
     private List<DeckCardDto> cards;
 }

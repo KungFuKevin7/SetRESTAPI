@@ -39,17 +39,5 @@ public class Card {
     @Column
     private char colour;
 
-    public DeckCardDto convertToCardDto(){
-        return new DeckCardDto(
-                card_id,
-                0,
-                "",
-                shape,
-                colour,
-                displayed_amount,
-                texture,
-                card_img
-        );
 
-    }
 }

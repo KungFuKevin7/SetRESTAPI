@@ -28,7 +28,7 @@ public class DeckCardService {
 
         for (DeckCard deckCard : deckCards) {
             for(DeckCardDto card : cards) {
-                if (deckCard.getCard().getCard_id() == card.convertToCard().getCard_id()){
+                if (deckCard.getCard().getCard_id() == card.getCardId()){
 
                     DeckCard itemToUpdate = deckCardRepository.findById((long)deckCard.getDeckCardId())
                             .orElseThrow();

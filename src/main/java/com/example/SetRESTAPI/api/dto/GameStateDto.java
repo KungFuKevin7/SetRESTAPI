@@ -1,5 +1,6 @@
 package com.example.SetRESTAPI.api.dto;
 
+import com.example.SetRESTAPI.api.model.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,11 +22,12 @@ public class GameStateDto {
 
     @Getter
     @Setter
+    private List<List<SetDto>> foundSets;
+
+    @Getter
+    @Setter
     private GameStatsDto gameStats;
 
-/*    @Getter
-    @Setter
-    private List<List<DeckCardDto>> possibleSets;*/
 
     public GameStateDto(int gameId, List<DeckCardDto> deckCards) {
         this.gameId = gameId;

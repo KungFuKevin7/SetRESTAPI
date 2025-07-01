@@ -1,5 +1,6 @@
 package com.example.SetRESTAPI.api.service;
 
+import com.example.SetRESTAPI.api.converter.CardConverter;
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.model.Card;
 import com.example.SetRESTAPI.api.model.CardsOnBoard;
@@ -40,12 +41,8 @@ public class HintService {
         List<Card> hintedCards =
                 setLogic.getSetHint(cards.toArray(Card[]::new));
 
-        List<DeckCardDto> hintedCardDtos = new ArrayList<>();
-        for (Card card : hintedCards) {
-            hintedCardDtos.add(card.convertToCardDto());
-        }
 
-        return hintedCardDtos;
+        return new CardConverter().convertList(hintedCards);
 
     }
 }

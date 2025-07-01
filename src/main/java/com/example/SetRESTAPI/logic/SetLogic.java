@@ -1,5 +1,8 @@
 package com.example.SetRESTAPI.logic;
 
+import com.example.SetRESTAPI.api.converter.CardConverter;
+import com.example.SetRESTAPI.api.converter.DeckCardConverter;
+import com.example.SetRESTAPI.api.converter.DeckCardDtoConverter;
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Card;
@@ -92,18 +95,11 @@ public class SetLogic {
         }
     }
 
-    public SetResponseDto isValidSet(List<DeckCardDto> cardsToCheck){
+    public boolean isValidSet(List<DeckCardDto> cardsToCheck){
 
-        SetResponseDto setResponse = new SetResponseDto();
+        List<Card> cards = new DeckCardDtoConverter().convertCardList(cardsToCheck);
 
-        List<Card> cards = new ArrayList<>();
-        for (DeckCardDto deckCardDto : cardsToCheck) {
-            cards.add(deckCardDto.convertToCard());
-        }
-
-        setResponse.setSetValid(checkIfSet(cards));
-
-        return setResponse;
+        return checkIfSet(cards);
     }
 
     /// Check if a property of a set of cards is valid

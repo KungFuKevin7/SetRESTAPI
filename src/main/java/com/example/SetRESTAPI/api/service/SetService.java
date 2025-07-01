@@ -1,5 +1,9 @@
 package com.example.SetRESTAPI.api.service;
 
+import com.example.SetRESTAPI.api.converter.CardConverter;
+import com.example.SetRESTAPI.api.converter.CardsOnBoardConverter;
+import com.example.SetRESTAPI.api.converter.DeckCardConverter;
+import com.example.SetRESTAPI.api.converter.DeckCardDtoConverter;
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.GameStateDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
@@ -35,6 +39,8 @@ public class SetService
     private CardsOnBoardRepository cardsOnBoardRepository;
     @Autowired
     private GameStatsDtoService gameStatsDtoService;
+    @Autowired
+    private DeckCardRepository deckCardRepository;
 
     @Autowired
     public SetService(SetRepository setRepository) {
@@ -49,37 +55,33 @@ public class SetService
         return setRepository.findById(id);
     }
 
-    public SetResponseDto validateAndSaveSet(List<DeckCardDto> cards, int gameId){
+    public boolean validateAndSaveSet(List<DeckCardDto> cards, int gameId){
 
-        SetResponseDto setValidity = this.setLogic.isValidSet(cards);
+        boolean setValid = this.setLogic.isValidSet(cards);
+        Game game = gameRepository.findById((long)gameId).orElseThrow();
 
         /// Set Deckcards to In Found Set
-        if (setValidity.isSetValid()){
+        if (setValid){
+            List<DeckCard> deckCards = deckCardRepository.getDeckCardsByGame(game);
+
+            deckCards
 
             Set set = addSet(gameId);
             addSetCard(cards, set);
 
- /*           for (DeckCardDto card : cards){
-
-            }*/
-
             deckCardService.updateDeckCardStatus(
-                    gameRepository.findById((long)gameId).orElseThrow(),
+                    game,
                     cards,
                     CardStatus.inFoundSet);
         }
 
-        return setValidity;
+        return setValid;
     }
 
     public void removeCardsFromBoard(Game game, List<DeckCardDto> validSetCards) {
         var cardsOnBoardGame = cardsOnBoardService.getCardsOnBoardByGame(game);
-        List<DeckCardDto> cardsOnBoard = new ArrayList<>();
 
-
-        for (CardsOnBoard card : cardsOnBoardGame){
-            cardsOnBoard.add(card.getCard().convertToCardDto());
-        }
+        List<DeckCardDto> cardsOnBoard = new CardsOnBoardConverter().convertList(cardsOnBoardGame);
 
         List<Integer> cardsRemoveFromBoard = new ArrayList<>();
         for (DeckCardDto card : cardsOnBoard){
@@ -115,21 +117,17 @@ public class SetService
                         game, Sort.by(Sort.Direction.ASC, "boardPosition"));
 
                 //Convert to Dto
-                List<DeckCardDto> remainingBoardCard = new ArrayList<>();
-                for (CardsOnBoard card : remainingBoardCards) {
-                    remainingBoardCard.add(card.getCard().convertToCardDto());
-                }
+                List<DeckCardDto> remainingBoardCardDto = new CardsOnBoardConverter().convertList(remainingBoardCards);
 
                 //Form new cards on board
-                newBoard = Stream.concat(remainingBoardCard.stream(), subList.stream()).toList();
+                newBoard = Stream.concat(remainingBoardCardDto.stream(), subList.stream()).toList();
 
                 for (DeckCardDto board : newBoard){
                     board.setStatus(CardStatus.onTable);
                 }
                 //Convert To type card
-                for (DeckCardDto card : newBoard) {
-                    newBoardCards.add(card.convertToCard());
-                }
+
+                newBoardCards = new DeckCardDtoConverter().convertList(newBoard);
             }
             else{
                 break;
@@ -145,24 +143,20 @@ public class SetService
 
     public GameStateDto handleNewBoard(int gameId, List<DeckCardDto> foundSetCards) {
 
-        SetResponseDto setValidity = validateAndSaveSet(foundSetCards, gameId);
-        if (!setValidity.isSetValid()){
+        if (!validateAndSaveSet(foundSetCards, gameId)){
             return new GameStateDto(gameId, new ArrayList<>());
         }
 
         Game game = gameRepository.findById((long)gameId).orElseThrow();
         List<DeckCard> deckCards = deckCardService.getDeckCardsInDeck(game);
 
-        List<DeckCardDto> deckCardDtos = new ArrayList<>();
-        for (DeckCard deckCard : deckCards){
-            deckCardDtos.add(deckCard.getCard().convertToCardDto());
-        }
+        List<DeckCardDto> deckCardsDto = new DeckCardConverter().convertList(deckCards);
 
         removeCardsFromBoard(game, foundSetCards);
-        List<DeckCardDto> newTable = getNewCardsOnBoard(game, deckCardDtos);
+        List<DeckCardDto> newTable = getNewCardsOnBoard(game, deckCardsDto);
 
         return new GameStateDto(gameId,
-                deckCardDtos,
+                deckCardsDto,
                 newTable,
                 gameStatsDtoService.getGameStatsDto(gameId));
     }
@@ -177,13 +171,7 @@ public class SetService
     }
 
     public List<SetCard> addSetCard(List<DeckCardDto> cards, Set set){
-        List<SetCard> setCards = new ArrayList<>();
-        for (DeckCardDto card : cards){
-            SetCard setCard = new SetCard();
-            setCard.setCard(card.convertToCard());
-            setCard.setSet(set);
-            setCards.add(setCard);
-        }
+        var setCards = new DeckCardDtoConverter().convertSetCardList(cards, set);
         return setCardRepository.saveAll(setCards);
     }
 

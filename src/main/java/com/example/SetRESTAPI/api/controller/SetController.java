@@ -48,14 +48,14 @@ public class SetController {
     }
 
     @PostMapping("/validate-for-game/{gameId}")
-    public ResponseEntity<SetResponseDto> validateSet(@RequestBody List<DeckCardDto> cards, @PathVariable int gameId){
+    public ResponseEntity<Boolean> validateSet(@RequestBody List<DeckCardDto> cards, @PathVariable int gameId){
 
-        SetResponseDto set = setService.validateAndSaveSet(cards, gameId);
+        boolean isValidSet = setService.validateAndSaveSet(cards, gameId);
 
-        if(set.isSetValid()){
-            return ResponseEntity.ok(set);
+        if(isValidSet){
+            return ResponseEntity.ok(true);
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(set);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
         }
     }
 

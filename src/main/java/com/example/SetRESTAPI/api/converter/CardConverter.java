@@ -30,4 +30,5 @@ public class CardConverter implements IConverter<Card, DeckCardDto> {
         }
         return deckCardDtos;
     }
+
 }

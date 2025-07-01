@@ -9,6 +9,7 @@ import com.example.SetRESTAPI.api.dto.GameStateDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.*;
 import com.example.SetRESTAPI.api.publics.CardStatus;
+import com.example.SetRESTAPI.api.publics.GameStatus;
 import com.example.SetRESTAPI.api.repository.*;
 import com.example.SetRESTAPI.logic.SetLogic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -60,19 +62,19 @@ public class SetService
         boolean setValid = this.setLogic.isValidSet(cards);
         Game game = gameRepository.findById((long)gameId).orElseThrow();
 
+        List<Integer> cardIds = new ArrayList<>();
+
         /// Set Deckcards to In Found Set
         if (setValid){
-            List<DeckCard> deckCards = deckCardRepository.getDeckCardsByGame(game);
 
-            deckCards
+            for (DeckCardDto card: cards){
+                cardIds.add(card.getCardId());
+            }
+
+            deckCardRepository.setDeckCardStatusToFoundSet(cardIds.toArray(new Integer[0]), gameId);
 
             Set set = addSet(gameId);
             addSetCard(cards, set);
-
-            deckCardService.updateDeckCardStatus(
-                    game,
-                    cards,
-                    CardStatus.inFoundSet);
         }
 
         return setValid;
@@ -99,47 +101,35 @@ public class SetService
                 game.getGame_id());
     }
 
-    public List<DeckCardDto> getNewCardsOnBoard(Game game, List<DeckCardDto> cardsInDeck) {
+    public List<DeckCardDto> getNewCardsOnBoard(Game game, List<DeckCardDto> cardsInDeck, List<DeckCardDto> currentCardsOnBoard) {
 
-        List<Card> newBoardCards = new ArrayList<>();
+        List<DeckCardDto> validNewCards = null;
 
-        List<DeckCardDto> newBoard = new ArrayList<>();
-        int index = 0;
-        //
-        do {
-            if (index + 3 <= cardsInDeck.size()) {
+        List<List<DeckCardDto>> possibleBoards = setLogic.generatePossibilities(cardsInDeck, 3);
+        for (List<DeckCardDto> possibleBoard : possibleBoards){
+            List<DeckCardDto> board = new ArrayList<>(currentCardsOnBoard);
+            board.addAll(possibleBoard);
 
-                //Slice 3 cards from the deck
-                List<DeckCardDto> subList = cardsInDeck.subList(index, index + 3);
+            board.forEach(card -> card.setStatus(CardStatus.onTable));
 
-                //Get Remaining 9 cards in deck
-                List<CardsOnBoard> remainingBoardCards = cardsOnBoardRepository.getCardsOnBoardByGame(
-                        game, Sort.by(Sort.Direction.ASC, "boardPosition"));
+            List<Card> testCards = new DeckCardDtoConverter().convertList(board);
 
-                //Convert to Dto
-                List<DeckCardDto> remainingBoardCardDto = new CardsOnBoardConverter().convertList(remainingBoardCards);
-
-                //Form new cards on board
-                newBoard = Stream.concat(remainingBoardCardDto.stream(), subList.stream()).toList();
-
-                for (DeckCardDto board : newBoard){
-                    board.setStatus(CardStatus.onTable);
-                }
-                //Convert To type card
-
-                newBoardCards = new DeckCardDtoConverter().convertList(newBoard);
-            }
-            else{
-                break;
+            if (!setLogic.FindSetOnTable(testCards.toArray(new Card[0])).isEmpty()){
+                validNewCards = possibleBoard;
             }
         }
-        //Keep checking until we found a set
-        while(setLogic.FindSetOnTable(newBoardCards.toArray(new Card[0])).isEmpty());
+        if (validNewCards != null){
 
-        cardsOnBoardService.replaceCardsOnBoard(newBoard, game.getGame_id());
 
-        return newBoard;
+            cardsOnBoardService.replaceCardsOnBoard(validNewCards, game.getGame_id());
+            return validNewCards;
+
+        }else {
+            //No Valid Combination available, Win state
+            return null;
+        }
     }
+
 
     public GameStateDto handleNewBoard(int gameId, List<DeckCardDto> foundSetCards) {
 
@@ -147,18 +137,58 @@ public class SetService
             return new GameStateDto(gameId, new ArrayList<>());
         }
 
+        //Get game
         Game game = gameRepository.findById((long)gameId).orElseThrow();
+
+        //Remove Cards From Board + Mark cards as in found Set
+        removeCardsFromBoard(game, foundSetCards);
+
+
+        //Get Cards on Board
+        List<CardsOnBoard> currentCardsOnBoard =
+                cardsOnBoardRepository.getCardsOnBoardByGame(game,
+                Sort.by(Sort.Direction.ASC,
+                        "boardPosition"));
+
+        // Convert cards on board to Dto
+        List<DeckCardDto> currentCardsOnBoardDtos = new CardsOnBoardConverter().convertList(currentCardsOnBoard);
+
+        //Get Cards in Deck
         List<DeckCard> deckCards = deckCardService.getDeckCardsInDeck(game);
 
+        //Convert Cards in Deck
         List<DeckCardDto> deckCardsDto = new DeckCardConverter().convertList(deckCards);
 
-        removeCardsFromBoard(game, foundSetCards);
-        List<DeckCardDto> newTable = getNewCardsOnBoard(game, deckCardsDto);
+        //Get New Cards That Form a valid table
+        List<DeckCardDto> threeNewCards = getNewCardsOnBoard(game, deckCardsDto, currentCardsOnBoardDtos);
 
-        return new GameStateDto(gameId,
-                deckCardsDto,
-                newTable,
-                gameStatsDtoService.getGameStatsDto(gameId));
+        //Update the CardStatuses of Cards on Table
+        List<Integer> cardIds = new ArrayList<>();
+        threeNewCards.forEach(id -> cardIds.add(id.getCardId()));
+        deckCardRepository.setDeckCardStatusToOnTable(cardIds.toArray(new Integer[0]), gameId);
+
+        //Now get the updated deckCards
+        deckCards = deckCardService.getDeckCardsInDeck(game);
+        deckCardsDto = new DeckCardConverter().convertList(deckCards);
+
+        if (threeNewCards.isEmpty()){
+            //Trigger Win state
+            return new GameStateDto(gameId,
+                    deckCardsDto,
+                    GameStatus.Completed,
+                    null,
+                    currentCardsOnBoardDtos,
+                    gameStatsDtoService.getGameStatsDto(gameId));
+        }
+        else {
+            List<DeckCardDto> newTable = Stream.concat(currentCardsOnBoardDtos.stream(), threeNewCards.stream()).toList();
+            return new GameStateDto(gameId,
+                    deckCardsDto,
+                    GameStatus.InProgress,
+                    null,
+                    newTable,
+                    gameStatsDtoService.getGameStatsDto(gameId));
+        }
     }
 
     public Set addSet(int gameId) {

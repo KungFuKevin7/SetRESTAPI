@@ -59,7 +59,7 @@ public class SetController {
         }
     }
 
-    @PostMapping("/handle-new-cards/{gameId}")
+    @PostMapping("/handle-validation-with-new-board/{gameId}")
     public ResponseEntity<GameStateDto> handelNewCards(@RequestBody List<DeckCardDto> foundsSetCards, @PathVariable int gameId){
         GameStateDto gameStateDto = setService.handleNewBoard(gameId, foundsSetCards);
         return ResponseEntity.ok(gameStateDto);

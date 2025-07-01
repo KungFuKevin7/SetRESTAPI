@@ -23,7 +23,7 @@ public class DeckCardService {
         return deckCardRepository.getDeckCardsByGame(game);
     }
 
-    public void updateDeckCardStatus(Game game, List<DeckCardDto> cards, String Status){
+ /*   public void updateDeckCardStatus(Game game, List<DeckCardDto> cards, String Status){
         List<DeckCard> deckCards = getDeckCards(game);
 
         for (DeckCard deckCard : deckCards) {
@@ -38,7 +38,7 @@ public class DeckCardService {
                 }
             }
         }
-    }
+    }*/
 
     public List<DeckCard> getDeckCardsInDeck(Game game){
         return deckCardRepository.getDeckCardsInDeckByGame(game.getGame_id());

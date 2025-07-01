@@ -22,6 +22,10 @@ public class GameStateDto {
 
     @Getter
     @Setter
+    private String status;
+
+    @Getter
+    @Setter
     private List<List<SetDto>> foundSets;
 
     @Getter
@@ -37,6 +41,15 @@ public class GameStateDto {
     public GameStateDto(int gameId, List<DeckCardDto> deckCards, List<DeckCardDto> cardsOnBoard, GameStatsDto gameStats) {
         this.gameId = gameId;
         this.deckCards = deckCards;
+        this.cardsOnBoard = cardsOnBoard;
+        this.gameStats = gameStats;
+    }
+
+    public GameStateDto(int gameId, List<DeckCardDto> deckCards, String status, List<List<SetDto>> foundSets, List<DeckCardDto> cardsOnBoard, GameStatsDto gameStats) {
+        this.gameId = gameId;
+        this.deckCards = deckCards;
+        this.status = status;
+        this.foundSets = foundSets;
         this.cardsOnBoard = cardsOnBoard;
         this.gameStats = gameStats;
     }

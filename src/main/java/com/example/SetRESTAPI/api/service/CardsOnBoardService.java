@@ -1,5 +1,6 @@
 package com.example.SetRESTAPI.api.service;
 
+import com.example.SetRESTAPI.api.converter.CardsOnBoardConverter;
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.model.CardsOnBoard;
 import com.example.SetRESTAPI.api.model.Card;
@@ -50,10 +51,11 @@ public class CardsOnBoardService {
         List<CardsOnBoard> cardOnBoardItems = new ArrayList<>();
 
         for (int i = 0; i < cardsOnBoard.size(); i++) {
-            CardsOnBoard cardsOnBoardItem = cardOnBoardItems.get(i);
-            cardsOnBoardItem.setBoardPosition(i);
-            cardsOnBoardItem.setGame(game);
-            cardsOnBoardItem.setCard(cardsOnBoardItem.getCard());
+            DeckCardDto cardsOnBoardItemDto = cardsOnBoard.get(i);
+
+            CardsOnBoard cardsOnBoardItem =
+                    new CardsOnBoardConverter().convertToCardsOnBoard(cardsOnBoardItemDto, i, game);
+
             cardOnBoardItems.add(cardsOnBoardItem);
         }
 
@@ -62,10 +64,10 @@ public class CardsOnBoardService {
 
 
     @Transactional
-    public List<CardsOnBoard> replaceCardsOnBoard(List<DeckCardDto> cardsOnBoard, int gameId) {
-        cardsOnBoardRepository.deleteCardsOnBoard(gameId);
+    public List<CardsOnBoard> replaceCardsOnBoard(List<DeckCardDto> newCards, int gameId) {
+        //cardsOnBoardRepository.deleteCardsOnBoard(gameId);
 
-        return addCardsOnBoard(cardsOnBoard, gameId);
+        return addCardsOnBoard(newCards, gameId);
     }
 
     //Removes a single card from the board

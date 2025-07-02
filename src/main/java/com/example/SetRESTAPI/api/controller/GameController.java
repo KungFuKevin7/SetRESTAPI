@@ -46,12 +46,6 @@ public class GameController {
         return ResponseEntity.ok(games);
     }
 
-    @PostMapping("/start-new")
-    public ResponseEntity<Game> startNewGame(@AuthenticationPrincipal UserPrincipal user) {
-        Game startedGame = gameService.startNewGame(user.getUser());
-        return new ResponseEntity<>(startedGame, HttpStatus.CREATED);
-    }
-
     @PostMapping("/start-new-with-deck")
     public ResponseEntity<GameStateDto> startNewGameWithDeck(@AuthenticationPrincipal UserPrincipal user)
     {
@@ -63,11 +57,6 @@ public class GameController {
     public ResponseEntity<GameStateDto> startExistingGame(@AuthenticationPrincipal UserPrincipal user, @PathVariable Long gameId){
         GameStateDto gameStateDto = gameService.startGame(gameId);
         return new ResponseEntity<>(gameStateDto, HttpStatus.OK);
-    }
-
-    @PostMapping
-    public Game addGame(@RequestBody Game game) {
-        return gameService.addGame(game);
     }
 
     @DeleteMapping("/{id}")

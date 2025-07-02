@@ -32,19 +32,9 @@ public class SetService
     @Autowired
     private GameRepository gameRepository;
     @Autowired
-    private DeckCardService deckCardService;
-    @Autowired
     private CardsOnBoardService cardsOnBoardService;
     @Autowired
-    private CardsOnBoardRepository cardsOnBoardRepository;
-    @Autowired
-    private GameStatsDtoService gameStatsDtoService;
-    @Autowired
     private DeckCardRepository deckCardRepository;
-    @Autowired
-    private FoundSetService foundSetService;
-    @Autowired
-    private BoardService boardService;
 
     public List<Set> getAllSets(){
         return setRepository.findAll();

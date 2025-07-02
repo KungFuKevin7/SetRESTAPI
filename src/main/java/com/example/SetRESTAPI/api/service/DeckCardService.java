@@ -5,6 +5,7 @@ import com.example.SetRESTAPI.api.model.Card;
 import com.example.SetRESTAPI.api.model.DeckCard;
 import com.example.SetRESTAPI.api.model.Game;
 import com.example.SetRESTAPI.api.repository.DeckCardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +13,8 @@ import java.util.List;
 @Service
 public class DeckCardService {
 
-    private final DeckCardRepository deckCardRepository;
+    @Autowired
+    private DeckCardRepository deckCardRepository;
 
     public DeckCardService(DeckCardRepository deckCardRepository) {
         this.deckCardRepository = deckCardRepository;

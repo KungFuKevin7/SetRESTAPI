@@ -19,14 +19,10 @@ import java.util.Optional;
 @Service
 public class CardsOnBoardService {
 
-    private final CardsOnBoardRepository cardsOnBoardRepository;
-    private final GameRepository gameRepository;
-
     @Autowired
-    public CardsOnBoardService(CardsOnBoardRepository cardsOnBoardRepository, GameRepository gameRepository) {
-        this.cardsOnBoardRepository = cardsOnBoardRepository;
-        this.gameRepository = gameRepository;
-    }
+    private CardsOnBoardRepository cardsOnBoardRepository;
+    @Autowired
+    private GameRepository gameRepository;
 
     public List<CardsOnBoard> getAllCardsOnBoard() {
         return cardsOnBoardRepository.findAll();

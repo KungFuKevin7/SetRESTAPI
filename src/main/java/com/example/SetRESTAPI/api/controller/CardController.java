@@ -23,11 +23,6 @@ public class CardController{
         return cardService.getAllCards();
     }
 
-    @GetMapping("/shuffled")
-    public List<Card> getTableCards(){
-        return cardService.getShuffledBoardCards();
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Card> getCardById(@PathVariable Long id){
         Optional<Card> card = cardService.getCardById(id);
@@ -42,14 +37,8 @@ public class CardController{
     }
 
     @PostMapping("/add-all")
-    public List<Card> createAllCards(){
+    public List<Card> addAllCards(){
         return cardService.addPlayingCards();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCard(@PathVariable Long id){
-        cardService.deleteCard(id);
-        return ResponseEntity.noContent().build();
     }
 
 }

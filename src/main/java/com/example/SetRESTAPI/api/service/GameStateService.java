@@ -21,6 +21,19 @@ public class GameStateService {
     @Autowired
     private DeckCardService deckCardService;
 
+    public GameStateDto startGame(Game game) {
+        List<DeckCard> deckCards = deckCardService.getDeckCardsInDeck(game);
+
+        return new GameStateDto(
+                game.getGame_id(),
+                new DeckCardConverter().convertList(deckCards),
+                game.getStatus(),
+                foundSetService.getFoundSets(game.getGame_id()),
+                cardsOnBoardService.getCurrentCardsOnBoard(game.getGame_id()),
+                gameStatsDtoService.getGameStatsDto(game.getGame_id())
+        );
+    }
+
     public GameStateDto buildGameState(Game game, String newStatus) {
 
         List<DeckCard> deckCards = deckCardService.getDeckCardsInDeck(game);
@@ -32,6 +45,5 @@ public class GameStateService {
                 cardsOnBoardService.getCurrentCardsOnBoard(game.getGame_id()),
                 gameStatsDtoService.getGameStatsDto(game.getGame_id())
         );
-
     }
 }

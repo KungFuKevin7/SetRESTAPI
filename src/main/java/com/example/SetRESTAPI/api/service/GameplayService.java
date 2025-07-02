@@ -31,6 +31,7 @@ public class GameplayService {
     @Autowired
     private GameProgressService gameProgressService;
 
+
     public GameStateDto validateSetAndUpdateBoard(int gameId, List<DeckCardDto> possibleSet) {
         Game game = gameRepository.findById((long) gameId).orElseThrow();
 

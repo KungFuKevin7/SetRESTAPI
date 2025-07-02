@@ -15,30 +15,8 @@ public class CardService {
     @Autowired
     private CardRepository cardRepository;
 
-
-    @Autowired
-    private SetLogic setLogic;
-
     public List<Card> getAllCards() {
         return cardRepository.findAll();
-    }
-
-    public List<Card> getShuffledBoardCards() {
-        List<Card> cards = cardRepository.findAll();
-        Collections.shuffle(cards);
-        return cards;
-    }
-
-    public List<Card> getShuffledTableCards(){
-        List<Card> shuffledTableCards;
-
-        do{
-            shuffledTableCards = cardRepository.getRandomTableCards();
-        } while (setLogic.FindSetOnTable(shuffledTableCards.toArray(new Card[0]))
-                .isEmpty());
-
-        ///DB Call to add cards to db
-        return shuffledTableCards;
     }
 
     public Optional<Card> getCardById(Long id){
@@ -54,11 +32,5 @@ public class CardService {
         return cardRepository.saveAll(cards);
     }
 
-    public void deleteCard(Long id){
-        if (cardRepository.existsById(id)){
-            cardRepository.deleteById(id);
-        } else{
-            throw new RuntimeException("Card does not exist");
-        }
-    }
+
 }

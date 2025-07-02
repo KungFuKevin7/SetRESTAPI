@@ -51,18 +51,22 @@ public class UserController {
 
         //Verify user and create Jwt
         Users loggedIn = userService.getUserByUsername(user.getUsername());
-        user.setUserid(loggedIn.getUserid());
-        String token = userService.verify(user);
-        long timeRemaining = userService.getRemainingTime(token);
+        if (loggedIn != null) {
+            user.setUserid(loggedIn.getUserid());
+            String token = userService.verify(user);
+            long timeRemaining = userService.getRemainingTime(token);
 
-        //Convert to Dto
-        AuthTokenDto authTokenDto = new AuthTokenDto(
-/*                user.getUserid(),*/
-                user.getUsername(),
-                token,
-                timeRemaining);
+            //Convert to Dto
+            AuthTokenDto authTokenDto = new AuthTokenDto(
+                    user.getUsername(),
+                    token,
+                    timeRemaining);
 
-        return ResponseEntity.ok(authTokenDto);
+            return ResponseEntity.ok(authTokenDto);
+        }
+        else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping("/get-token")

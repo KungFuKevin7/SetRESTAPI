@@ -1,13 +1,10 @@
 package com.example.SetRESTAPI.api.controller;
 
-
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.GameStateDto;
 import com.example.SetRESTAPI.api.dto.SetDto;
-import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Set;
 import com.example.SetRESTAPI.api.service.FoundSetService;
-import com.example.SetRESTAPI.api.service.GameStateService;
 import com.example.SetRESTAPI.api.service.GameplayService;
 import com.example.SetRESTAPI.api.service.SetService;
 import org.springframework.beans.factory.annotation.Autowired;

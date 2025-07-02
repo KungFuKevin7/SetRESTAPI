@@ -23,28 +23,19 @@ import java.util.*;
 @Service
 public class GameService {
 
-    private final GameRepository gameRepository;
-    private final UserRepository userRepository;
     @Autowired
-    private GameStatsDtoService gameStatsDtoService;
-    private final CardService cardService;
-    private final DeckCardRepository deckCardRepository;
-    private final CardsOnBoardRepository cardsOnBoardRepository;
-    private final SetLogic setLogic;
+    private GameRepository gameRepository;
     @Autowired
-    private SetService setService;
+    private DeckCardRepository deckCardRepository;
     @Autowired
-    private FoundSetService foundSetService;
+    private CardsOnBoardRepository cardsOnBoardRepository;
+    @Autowired
+    private SetLogic setLogic;
+    @Autowired
+    private GameStateService gameStateService;
+    @Autowired
+    private DeckService deckService;
 
-    @Autowired
-    public GameService(GameRepository gameRepository, UserRepository userRepository, CardService cardService, DeckCardRepository deckCardRepository, CardsOnBoardRepository cardsOnBoardRepository, SetLogic setLogic) {
-        this.gameRepository = gameRepository;
-        this.userRepository = userRepository;
-        this.cardService = cardService;
-        this.deckCardRepository = deckCardRepository;
-        this.cardsOnBoardRepository = cardsOnBoardRepository;
-        this.setLogic = setLogic;
-    }
 
     public List<Game> getAllGames() {
         return gameRepository.findAll();
@@ -56,10 +47,6 @@ public class GameService {
 
     public Optional<Game> getGameById(Long id) {
         return gameRepository.findById(id);
-    }
-
-    public Game addGame(Game game){
-        return gameRepository.save(game);
     }
 
     public void deleteGame(Long id){
@@ -78,7 +65,6 @@ public class GameService {
         return gameRepository.save(game);
     }
 
-    /// This method needs a lot of reworking for the love of god.
     @Transactional
     public GameStateDto startGameWithDeck(Users user) {
         Game game = startNewGame(user);
@@ -93,7 +79,7 @@ public class GameService {
         List<DeckCard> tableCards;
 
         do {
-            fullDeck = cardService.getShuffledBoardCards();
+            fullDeck = deckService.getShuffledDeck();
 
             for (int i = 0; i < fullDeck.size(); i++) {
                 DeckCard deckCard = new DeckCard();
@@ -146,38 +132,14 @@ public class GameService {
         deckCardRepository.saveAll(deckCards);
         cardsOnBoardRepository.saveAll(cardsOnBoards);
 
-        return new GameStateDto(
-                game.getGame_id(),
-                deckCardDto,
-                GameStatus.InProgress,
-                foundSetService.getFoundSets(game.getGame_id()),
-                tableCardDto,
-                gameStatsDtoService.getGameStatsDto(game.getGame_id())
-                );
+        return gameStateService.startGame(game);
     }
 
     public GameStateDto startGame(Long gameId) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow();
 
-        List<DeckCard> deckCards = deckCardRepository.getDeckCardsByGame(game);
-        List<CardsOnBoard> cardsOnBoard = cardsOnBoardRepository.getCardsOnBoardByGame(game,
-                Sort.by(Sort.Direction.ASC, "boardPosition"));
-
-        List<DeckCardDto> cardsInDeck = deckCards.stream()
-                .map(DeckCardDto::new)
-                .toList();
-
-        List<DeckCardDto> boardCards = new CardsOnBoardConverter().convertList(cardsOnBoard);
-
-        return new GameStateDto(
-                game.getGame_id(),
-                cardsInDeck,
-                game.getStatus(),
-                foundSetService.getFoundSets(game.getGame_id()),
-                boardCards,
-                gameStatsDtoService.getGameStatsDto(game.getGame_id())
-        );
+        return gameStateService.startGame(game);
     }
 
 }

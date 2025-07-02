@@ -14,8 +14,6 @@ public class GameProgressService {
     @Autowired
     private GameRepository gameRepository;
 
-
-
     public void endGame(int gameId){
         gameRepository.updateGameStatusByGameId
                 (GameStatus.Completed, gameId);

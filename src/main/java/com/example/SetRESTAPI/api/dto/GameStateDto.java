@@ -26,7 +26,7 @@ public class GameStateDto {
 
     @Getter
     @Setter
-    private List<List<SetDto>> foundSets;
+    private List<SetDto> foundSets;
 
     @Getter
     @Setter
@@ -45,7 +45,7 @@ public class GameStateDto {
         this.gameStats = gameStats;
     }
 
-    public GameStateDto(int gameId, List<DeckCardDto> deckCards, String status, List<List<SetDto>> foundSets, List<DeckCardDto> cardsOnBoard, GameStatsDto gameStats) {
+    public GameStateDto(int gameId, List<DeckCardDto> deckCards, String status, List<SetDto> foundSets, List<DeckCardDto> cardsOnBoard, GameStatsDto gameStats) {
         this.gameId = gameId;
         this.deckCards = deckCards;
         this.status = status;

@@ -11,6 +11,7 @@ public class SetCard {
     @Id
     @Getter
     @Setter
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int SetCardId;
 

@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface SetRepository extends JpaRepository<Set, Long> {
     List<Set> findByGame(Game game);
+
+    long countByGame(Game game);
 }

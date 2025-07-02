@@ -47,15 +47,4 @@ public class CardsOnBoardController {
                 HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCardOnBoard(@PathVariable Long id){
-        cardsOnBoardService.deleteCardsOnBoard(id);
-        return ResponseEntity.noContent().build();
-    }
-
-/*    @DeleteMapping("/delete-set")
-    public ResponseEntity<Void> deleteSetfromBoard(@RequestBody List<Long> cardIds){
-        cardsOnBoardService.deleteSetOnBoard(cardIds);
-        return ResponseEntity.noContent().build();
-    }*/
 }

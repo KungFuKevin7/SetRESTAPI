@@ -23,23 +23,6 @@ public class DeckCardService {
         return deckCardRepository.getDeckCardsByGame(game);
     }
 
- /*   public void updateDeckCardStatus(Game game, List<DeckCardDto> cards, String Status){
-        List<DeckCard> deckCards = getDeckCards(game);
-
-        for (DeckCard deckCard : deckCards) {
-            for(DeckCardDto card : cards) {
-                if (deckCard.getCard().getCard_id() == card.getCardId()){
-
-                    DeckCard itemToUpdate = deckCardRepository.findById((long)deckCard.getDeckCardId())
-                            .orElseThrow();
-
-                    itemToUpdate.setStatus(Status);
-                    deckCardRepository.save(itemToUpdate);
-                }
-            }
-        }
-    }*/
-
     public List<DeckCard> getDeckCardsInDeck(Game game){
         return deckCardRepository.getDeckCardsInDeckByGame(game.getGame_id());
     }

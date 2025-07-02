@@ -53,7 +53,6 @@ public class DeckCardDtoConverter implements IConverter<DeckCardDto, Card> {
         return cards;
     }
 
-
     public SetCard convertSetCard(DeckCardDto card, Set set) {
         SetCard setCard = new SetCard();
         setCard.setCard(convertCard(card));
@@ -64,7 +63,7 @@ public class DeckCardDtoConverter implements IConverter<DeckCardDto, Card> {
     public List<SetCard> convertSetCardList(List<DeckCardDto> cards, Set set) {
         List<SetCard> setCards = new ArrayList<>();
         for (DeckCardDto card : cards){
-            convertSetCard(card, set);
+            setCards.add(convertSetCard(card, set));
         }
         return setCards;
     }

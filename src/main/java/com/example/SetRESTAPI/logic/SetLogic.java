@@ -21,7 +21,7 @@ public class SetLogic {
         List<List<Card>> validSets = CheckIfSetsOnTable(Arrays.stream(cardsOnTable).toList(),
                 new ArrayList<>(), 0);
 
-        for (int i = 0; i < validSets.size(); i++) {
+        /*       for (int i = 0; i < validSets.size(); i++) {
             System.out.println("Set "+ i);
             for (Card card : validSets.get(i)) {
                 System.out.println(
@@ -30,7 +30,7 @@ public class SetLogic {
                         card.getTexture() + ", " +
                         card.getColour());
             }
-        }
+        }*/
         return validSets;
     }
 

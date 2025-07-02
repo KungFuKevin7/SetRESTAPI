@@ -70,12 +70,14 @@ public class CardsOnBoardService {
         return addCardsOnBoard(newCards, gameId);
     }
 
-    //Removes a single card from the board
-    public void deleteCardsOnBoard(Long Id) {
-        if (cardsOnBoardRepository.existsById(Id)){
-            cardsOnBoardRepository.deleteById(Id);
-        } else{
-            throw new RuntimeException("CardsOnBoard Item does not exist");
-        }
+    public List<DeckCardDto> getCurrentCardsOnBoard(long gameId) {
+
+        Game game = gameRepository.findById(gameId).orElseThrow();
+        List<CardsOnBoard> cardsOnBoards = cardsOnBoardRepository.getCardsOnBoardByGame(game,
+                Sort.by(Sort.Direction.ASC, "boardPosition"));
+
+        return new CardsOnBoardConverter().convertList(cardsOnBoards);
+
     }
+
 }

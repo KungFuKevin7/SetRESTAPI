@@ -31,6 +31,8 @@ public class GameService {
     private final DeckCardRepository deckCardRepository;
     private final CardsOnBoardRepository cardsOnBoardRepository;
     private final SetLogic setLogic;
+    @Autowired
+    private SetService setService;
 
     @Autowired
     public GameService(GameRepository gameRepository, UserRepository userRepository, CardService cardService, DeckCardRepository deckCardRepository, CardsOnBoardRepository cardsOnBoardRepository, SetLogic setLogic) {
@@ -147,6 +149,8 @@ public class GameService {
         return new GameStateDto(
                 game.getGame_id(),
                 deckCardDto,
+                GameStatus.InProgress,
+                setService.getFoundSets(game.getGame_id()),
                 tableCardDto,
                 gameStatsDtoService.getGameStatsDto(game.getGame_id())
                 );
@@ -166,12 +170,14 @@ public class GameService {
 
         List<DeckCardDto> boardCards = new CardsOnBoardConverter().convertList(cardsOnBoard);
 
-
         return new GameStateDto(
                 game.getGame_id(),
                 cardsInDeck,
+                GameStatus.InProgress,
+                setService.getFoundSets(game.getGame_id()),
                 boardCards,
-                gameStatsDtoService.getGameStatsDto(game.getGame_id()));
+                gameStatsDtoService.getGameStatsDto(game.getGame_id())
+        );
     }
 
 }

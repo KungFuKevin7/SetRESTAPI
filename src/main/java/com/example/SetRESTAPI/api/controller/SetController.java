@@ -3,6 +3,7 @@ package com.example.SetRESTAPI.api.controller;
 
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
 import com.example.SetRESTAPI.api.dto.GameStateDto;
+import com.example.SetRESTAPI.api.dto.SetDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Set;
 import com.example.SetRESTAPI.api.service.SetService;
@@ -35,18 +36,6 @@ public class SetController {
         );
     }
 
-    @PostMapping
-    public List<Set> addSet(@RequestBody List<Set> set){
-        return setService.addSet(set);
-    }
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCard(@PathVariable Long id){
-        setService.deleteSet(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @PostMapping("/validate-for-game/{gameId}")
     public ResponseEntity<Boolean> validateSet(@RequestBody List<DeckCardDto> cards, @PathVariable int gameId){
 
@@ -63,6 +52,13 @@ public class SetController {
     public ResponseEntity<GameStateDto> handelNewCards(@RequestBody List<DeckCardDto> foundsSetCards, @PathVariable int gameId){
         GameStateDto gameStateDto = setService.handleNewBoard(gameId, foundsSetCards);
         return ResponseEntity.ok(gameStateDto);
+    }
+
+
+    @GetMapping("/found-in-game/{gameId}")
+    public ResponseEntity<List<SetDto>> setsFoundInGame(@PathVariable int gameId){
+        List<SetDto> foundSets = setService.getFoundSets(gameId);
+        return ResponseEntity.ok(foundSets);
     }
 
 }

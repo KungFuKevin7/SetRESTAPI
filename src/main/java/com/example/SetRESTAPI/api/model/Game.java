@@ -19,12 +19,6 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int game_id;
 
-    @Column
-    private int sets_found;
-
-    @Column
-    private int elapsed_time;
-
     @ManyToOne
     @JoinColumn(name = "UserId")
     private Users users;

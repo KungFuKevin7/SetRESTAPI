@@ -62,14 +62,6 @@ public class CardsOnBoardService {
         return cardsOnBoardRepository.saveAll(cardOnBoardItems);
     }
 
-
-    @Transactional
-    public List<CardsOnBoard> replaceCardsOnBoard(List<DeckCardDto> newCards, int gameId) {
-        //cardsOnBoardRepository.deleteCardsOnBoard(gameId);
-
-        return addCardsOnBoard(newCards, gameId);
-    }
-
     public List<DeckCardDto> getCurrentCardsOnBoard(long gameId) {
 
         Game game = gameRepository.findById(gameId).orElseThrow();
@@ -77,7 +69,6 @@ public class CardsOnBoardService {
                 Sort.by(Sort.Direction.ASC, "boardPosition"));
 
         return new CardsOnBoardConverter().convertList(cardsOnBoards);
-
     }
 
 }

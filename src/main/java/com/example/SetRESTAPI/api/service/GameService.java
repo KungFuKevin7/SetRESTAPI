@@ -70,10 +70,8 @@ public class GameService {
 
     public Game startNewGame(Users user) {
         Game game = new Game();
-        game.setElapsed_time(0);
         game.setUsers(user);
         game.setStatus(GameStatus.InProgress);
-        game.setSets_found(0);
         game.setCreated_at(LocalDateTime.now());
         return gameRepository.save(game);
     }
@@ -89,7 +87,7 @@ public class GameService {
         List<DeckCard> deckCards = new ArrayList<>();
         List<CardsOnBoard> cardsOnBoards = new ArrayList<>();
 
-        List<Card> cardsOnBoard =  new ArrayList<>();
+        List<Card> cardsOnBoard = new ArrayList<>();
         List<DeckCard> tableCards;
 
         do {
@@ -173,7 +171,7 @@ public class GameService {
         return new GameStateDto(
                 game.getGame_id(),
                 cardsInDeck,
-                GameStatus.InProgress,
+                game.getStatus(),
                 setService.getFoundSets(game.getGame_id()),
                 boardCards,
                 gameStatsDtoService.getGameStatsDto(game.getGame_id())

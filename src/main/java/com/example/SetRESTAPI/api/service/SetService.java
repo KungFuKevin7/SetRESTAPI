@@ -107,10 +107,11 @@ public class SetService
             }
         }
         if (validNewCards != null){
-            cardsOnBoardService.replaceCardsOnBoard(validNewCards, game.getGame_id());
+            cardsOnBoardService.addCardsOnBoard(validNewCards, game.getGame_id());
             return validNewCards;
 
         } else {
+            endGame(game.getGame_id());
             //No Valid Combination available, Win state
             return new ArrayList<>();
         }
@@ -222,4 +223,9 @@ public class SetService
         return setCardsFromGame;
     }
 
+
+    public void endGame(int gameId){
+        gameRepository.updateGameStatusByGameId
+             (GameStatus.Completed, gameId);
+    }
 }

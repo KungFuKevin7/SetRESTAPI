@@ -9,7 +9,6 @@ import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
 
-
     private static final long serialVersionUID = 1L;
 
     private final Users user;
@@ -49,7 +48,6 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isAccountNonLocked() {
         return true;	}
-
 
     @Override
     public boolean isCredentialsNonExpired() {

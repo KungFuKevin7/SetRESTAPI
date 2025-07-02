@@ -14,14 +14,7 @@ public class GameProgressService {
     @Autowired
     private GameRepository gameRepository;
 
-    public String determineStatus(List<DeckCardDto> newCards){
-        if (newCards.isEmpty()){
-            return GameStatus.Completed;
-        }
-        else {
-            return GameStatus.InProgress;
-        }
-    }
+
 
     public void endGame(int gameId){
         gameRepository.updateGameStatusByGameId

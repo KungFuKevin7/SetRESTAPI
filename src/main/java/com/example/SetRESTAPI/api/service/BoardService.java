@@ -30,49 +30,6 @@ public class BoardService {
     @Autowired
     private GameRepository gameRepository;
 
-    public List<Integer> getCardIdsToRemoveFromBoard(Game game, List<DeckCardDto> validSetCards) {
-        var cardsOnBoard = cardsOnBoardService.getCurrentCardsOnBoard(game.getGame_id());
-
-        List<Integer> cardsRemoveFromBoard = new ArrayList<>();
-        for (DeckCardDto card : cardsOnBoard){
-            for (DeckCardDto validSetCard : validSetCards){
-                if (card.getCardId() == validSetCard.getCardId()){
-                    cardsRemoveFromBoard.add(card.getCardId());
-                }
-            }
-        }
-        return cardsRemoveFromBoard;
-    }
-
-
-    public List<DeckCardDto> getNewCardsOnBoard(Game game, List<DeckCardDto> cardsInDeck, List<DeckCardDto> currentCardsOnBoard) {
-
-        List<DeckCardDto> validNewCards = null;
-
-        List<List<DeckCardDto>> possibleBoards = setLogic.generatePossibilities(cardsInDeck, 3);
-        for (List<DeckCardDto> possibleBoard : possibleBoards){
-            List<DeckCardDto> board = new ArrayList<>(currentCardsOnBoard);
-            board.addAll(possibleBoard);
-
-            board.forEach(card -> card.setStatus(CardStatus.onTable));
-
-            List<Card> testCards = new DeckCardDtoConverter().convertList(board);
-
-            if (!setLogic.FindSetOnTable(testCards.toArray(new Card[0])).isEmpty()){
-                validNewCards = possibleBoard;
-            }
-        }
-        if (validNewCards != null){
-            cardsOnBoardService.addCardsOnBoard(validNewCards, game.getGame_id());
-            return validNewCards;
-
-        } else {
-            //endGame(game.getGame_id());
-            //No Valid Combination available, Win state
-            return new ArrayList<>();
-        }
-    }
-
     public boolean updateBoardWithCards(int gameId){
         Game game = gameRepository.findById((long)gameId)
                 .orElseThrow();
@@ -124,19 +81,7 @@ public class BoardService {
         if (validNewCards != null){
             return validNewCards;
         } else {
-            //No Valid Combination available, Win state
             return new ArrayList<>();
         }
-
     }
-/*    public void markCardsOnBoardAsFound(Game game, List<DeckCardDto> validSetCards) {
-
-        List<Integer> cardsMarkedForRemoval = getCardIdsToRemoveFromBoard(game, validSetCards);
-        cardsOnBoardService.deleteCardsOnBoard(game, cardsMarkedForRemoval);
-    }*/
-
-
-
-
-
 }

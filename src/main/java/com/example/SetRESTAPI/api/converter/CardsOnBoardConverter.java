@@ -38,5 +38,4 @@ public class CardsOnBoardConverter implements IConverter<CardsOnBoard, DeckCardD
         return cardsOnBoard;
     }
 
-    //public List<CardsOnBoard>
 }

@@ -28,8 +28,10 @@ public class FoundSetService {
     private SetCardRepository setCardRepository;
 
 
-    public List<SetDto> getFoundSets(Game game) {
+    public List<SetDto> getFoundSets(int gameId) {
 
+        Game game = gameRepository.findById((long)gameId)
+                .orElseThrow();
         //Get Sets
         var sets = setRepository.findByGame(game);
 

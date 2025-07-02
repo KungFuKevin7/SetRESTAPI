@@ -6,6 +6,7 @@ import com.example.SetRESTAPI.api.dto.GameStateDto;
 import com.example.SetRESTAPI.api.dto.SetDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Set;
+import com.example.SetRESTAPI.api.service.FoundSetService;
 import com.example.SetRESTAPI.api.service.GameStateService;
 import com.example.SetRESTAPI.api.service.GameplayService;
 import com.example.SetRESTAPI.api.service.SetService;
@@ -26,6 +27,8 @@ public class SetController {
     private SetService setService;
     @Autowired
     private GameplayService gameplayService;
+    @Autowired
+    private FoundSetService foundSetsService;
 
     @GetMapping
     public List<Set> getAllSets(){
@@ -54,7 +57,6 @@ public class SetController {
 
     @PostMapping("/handle-validation-with-new-board/{gameId}")
     public ResponseEntity<GameStateDto> handelNewCards(@RequestBody List<DeckCardDto> foundsSetCards, @PathVariable int gameId){
-        //GameStateDto gameStateDto = setService.handleNewBoard(gameId, foundsSetCards);
         GameStateDto gameStateDto = gameplayService.validateSetAndUpdateBoard(gameId, foundsSetCards);
 
         return ResponseEntity.ok(gameStateDto);
@@ -63,7 +65,7 @@ public class SetController {
 
     @GetMapping("/found-in-game/{gameId}")
     public ResponseEntity<List<SetDto>> setsFoundInGame(@PathVariable int gameId){
-        List<SetDto> foundSets = setService.getFoundSets(gameId);
+        List<SetDto> foundSets = foundSetsService.getFoundSets(gameId);
         return ResponseEntity.ok(foundSets);
     }
 

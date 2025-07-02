@@ -33,6 +33,8 @@ public class GameService {
     private final SetLogic setLogic;
     @Autowired
     private SetService setService;
+    @Autowired
+    private FoundSetService foundSetService;
 
     @Autowired
     public GameService(GameRepository gameRepository, UserRepository userRepository, CardService cardService, DeckCardRepository deckCardRepository, CardsOnBoardRepository cardsOnBoardRepository, SetLogic setLogic) {
@@ -148,7 +150,7 @@ public class GameService {
                 game.getGame_id(),
                 deckCardDto,
                 GameStatus.InProgress,
-                setService.getFoundSets(game.getGame_id()),
+                foundSetService.getFoundSets(game.getGame_id()),
                 tableCardDto,
                 gameStatsDtoService.getGameStatsDto(game.getGame_id())
                 );
@@ -172,7 +174,7 @@ public class GameService {
                 game.getGame_id(),
                 cardsInDeck,
                 game.getStatus(),
-                setService.getFoundSets(game.getGame_id()),
+                foundSetService.getFoundSets(game.getGame_id()),
                 boardCards,
                 gameStatsDtoService.getGameStatsDto(game.getGame_id())
         );

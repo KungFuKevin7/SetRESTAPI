@@ -28,7 +28,7 @@ public class GameStateService {
                 game.getGame_id(),
                 new DeckCardConverter().convertList(deckCards),
                 newStatus,
-                foundSetService.getFoundSets(game), //Check
+                foundSetService.getFoundSets(game.getGame_id()),
                 cardsOnBoardService.getCurrentCardsOnBoard(game.getGame_id()),
                 gameStatsDtoService.getGameStatsDto(game.getGame_id())
         );

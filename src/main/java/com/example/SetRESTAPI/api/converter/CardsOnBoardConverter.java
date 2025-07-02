@@ -37,4 +37,6 @@ public class CardsOnBoardConverter implements IConverter<CardsOnBoard, DeckCardD
         cardsOnBoard.setBoardPosition(position);
         return cardsOnBoard;
     }
+
+    //public List<CardsOnBoard>
 }

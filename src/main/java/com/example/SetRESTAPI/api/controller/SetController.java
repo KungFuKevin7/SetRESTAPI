@@ -6,6 +6,8 @@ import com.example.SetRESTAPI.api.dto.GameStateDto;
 import com.example.SetRESTAPI.api.dto.SetDto;
 import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Set;
+import com.example.SetRESTAPI.api.service.GameStateService;
+import com.example.SetRESTAPI.api.service.GameplayService;
 import com.example.SetRESTAPI.api.service.SetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,8 @@ public class SetController {
 
     @Autowired
     private SetService setService;
+    @Autowired
+    private GameplayService gameplayService;
 
     @GetMapping
     public List<Set> getAllSets(){
@@ -50,7 +54,9 @@ public class SetController {
 
     @PostMapping("/handle-validation-with-new-board/{gameId}")
     public ResponseEntity<GameStateDto> handelNewCards(@RequestBody List<DeckCardDto> foundsSetCards, @PathVariable int gameId){
-        GameStateDto gameStateDto = setService.handleNewBoard(gameId, foundsSetCards);
+        //GameStateDto gameStateDto = setService.handleNewBoard(gameId, foundsSetCards);
+        GameStateDto gameStateDto = gameplayService.validateSetAndUpdateBoard(gameId, foundsSetCards);
+
         return ResponseEntity.ok(gameStateDto);
     }
 

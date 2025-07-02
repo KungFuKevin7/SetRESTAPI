@@ -41,6 +41,10 @@ public class SetService
     private GameStatsDtoService gameStatsDtoService;
     @Autowired
     private DeckCardRepository deckCardRepository;
+    @Autowired
+    private FoundSetService foundSetService;
+    @Autowired
+    private BoardService boardService;
 
     public List<Set> getAllSets(){
         return setRepository.findAll();
@@ -72,7 +76,7 @@ public class SetService
         return setValid;
     }
 
-    public void removeCardsFromBoard(Game game, List<DeckCardDto> validSetCards) {
+    /*public void removeCardsFromBoard(Game game, List<DeckCardDto> validSetCards) {
         var cardsOnBoard = cardsOnBoardService.getCurrentCardsOnBoard(game.getGame_id());
 
         List<Integer> cardsRemoveFromBoard = new ArrayList<>();
@@ -115,9 +119,9 @@ public class SetService
             //No Valid Combination available, Win state
             return new ArrayList<>();
         }
-    }
+    }*/
 
-
+/*
     public GameStateDto handleNewBoard(int gameId, List<DeckCardDto> foundSetCards) {
 
         //Get game
@@ -127,6 +131,7 @@ public class SetService
         List<DeckCard> deckCards = deckCardService.getDeckCardsInDeck(game);
         List<DeckCardDto> deckCardsDto = new DeckCardConverter().convertList(deckCards);
 
+        //Validate Set
         if (!validateAndSaveSet(foundSetCards, gameId)){
             return new GameStateDto(gameId,
                     deckCardsDto,
@@ -179,7 +184,7 @@ public class SetService
                     newTable,
                     gameStatsDtoService.getGameStatsDto(gameId));
         }
-    }
+    }*/
 
     public Set addSet(int gameId) {
         Game game = gameRepository.findById((long)gameId).orElse(null);
@@ -227,5 +232,25 @@ public class SetService
     public void endGame(int gameId){
         gameRepository.updateGameStatusByGameId
              (GameStatus.Completed, gameId);
+    }
+
+    public void processValidSet(Game game, List<DeckCardDto> setCards){
+
+        List<Integer> setCardIds = new ArrayList<>();
+        for (DeckCardDto card: setCards){
+            setCardIds.add(card.getCardId());
+        }
+
+        //Remove from Board
+        cardsOnBoardService.deleteCardsOnBoard(game, setCardIds);
+
+        //In DeckCards Set cards to Found Set
+        deckCardRepository.setDeckCardStatusToFoundSet(
+                setCardIds.toArray(new Integer[0]), game.getGame_id());
+
+        //Add new Set + SetCards to Database
+        Set set =
+                addSet(game.getGame_id());
+        addSetCard(setCards, set);
     }
 }

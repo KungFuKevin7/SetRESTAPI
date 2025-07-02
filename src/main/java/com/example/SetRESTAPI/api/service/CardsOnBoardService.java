@@ -71,4 +71,10 @@ public class CardsOnBoardService {
         return new CardsOnBoardConverter().convertList(cardsOnBoards);
     }
 
+    public void deleteCardsOnBoard(Game game, List<Integer> cardsRemoveFromBoard) {
+        cardsOnBoardRepository.deleteCardsOnBoardByCard(
+                cardsRemoveFromBoard.toArray(new Integer[0]),
+                game.getGame_id());
+    }
+
 }

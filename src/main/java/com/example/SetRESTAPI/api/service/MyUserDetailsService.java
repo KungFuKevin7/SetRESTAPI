@@ -23,7 +23,7 @@ public class MyUserDetailsService implements UserDetailsService {
         Users user = userRepository.findByUsername(userName);
 
         if (user == null) {
-            throw new UsernameNotFoundException("Players " + userName + " not found.");
+            throw new UsernameNotFoundException("User " + userName + " not found.");
         }
 
         return new UserPrincipal(user);

@@ -69,22 +69,10 @@ public class UserController {
         }
     }
 
-    @PostMapping("/get-token")
-    public ResponseEntity<?> getUserFromToken(String token) {
-        token = token.replace("Bearer ", "");
-        Long userId = jwtService.extractUserId(token);
-
-        return ResponseEntity.ok("access Granted to user: " + userId);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Users> deletePlayer(@PathVariable int id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/get-time")
-    public long getTime(String token){
-        return userService.getRemainingTime(token);
-    }
 }

@@ -12,6 +12,7 @@ import com.example.SetRESTAPI.api.repository.CardsOnBoardRepository;
 import com.example.SetRESTAPI.api.repository.DeckCardRepository;
 import com.example.SetRESTAPI.api.repository.GameRepository;
 import com.example.SetRESTAPI.logic.SetLogic;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class BoardService {
     @Autowired
     private GameRepository gameRepository;
 
+    @Transactional
     public boolean updateBoardWithCards(int gameId){
         Game game = gameRepository.findById((long)gameId)
                 .orElseThrow();
@@ -41,18 +43,19 @@ public class BoardService {
         //Try to pick new cards
         List<DeckCardDto> newCards = pickNewCards(cardsInDeck, currentCardsOnBoard);
 
-        //Update Deck Cards to On table
-        List<Integer> cardIds = new ArrayList<>();
-        newCards.forEach(id -> cardIds.add(id.getCardId()));
-        deckCardRepository.setDeckCardStatusToOnTable(cardIds.toArray(new Integer[0]), gameId);
-
         //If no cards could be picked, end the game
         if(newCards.isEmpty()){
 
             return true;
         }
+
         //Else add to the database
         else{
+            //Update Deck Cards to On table
+            List<Integer> cardIds = new ArrayList<>();
+            newCards.forEach(id -> cardIds.add(id.getCardId()));
+            deckCardRepository.setDeckCardStatusToOnTable(cardIds.toArray(new Integer[0]), gameId);
+
             cardsOnBoardService.addCardsOnBoard(newCards, game.getGame_id());
 
             return false;

@@ -40,13 +40,12 @@ public class GameplayService {
             return gameStateService.buildGameState(game, GameStatus.InProgress);
         }
 
-        setService.processValidSet(game, possibleSet); // Removes cards, marks found
+        setService.processValidSet(game, possibleSet);
 
         boolean gameFinished = boardService.updateBoardWithCards(gameId); // Pulls new cards onto board
 
         if (gameFinished) {
-            gameProgressService.endGame(gameId); // Optional: checks for victory condition
-            return gameStateService.buildGameState(game, GameStatus.Completed);
+            return gameProgressService.endGame(game);
         }
 
         return gameStateService.buildGameState(game, GameStatus.InProgress);

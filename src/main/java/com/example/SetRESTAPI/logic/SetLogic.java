@@ -1,13 +1,9 @@
 package com.example.SetRESTAPI.logic;
 
-import com.example.SetRESTAPI.api.converter.CardConverter;
-import com.example.SetRESTAPI.api.converter.DeckCardConverter;
 import com.example.SetRESTAPI.api.converter.DeckCardDtoConverter;
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
-import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.Card;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

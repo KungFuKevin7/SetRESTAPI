@@ -2,23 +2,15 @@ package com.example.SetRESTAPI.api.service;
 
 import com.example.SetRESTAPI.api.converter.*;
 import com.example.SetRESTAPI.api.dto.DeckCardDto;
-import com.example.SetRESTAPI.api.dto.GameStateDto;
-import com.example.SetRESTAPI.api.dto.SetDto;
-import com.example.SetRESTAPI.api.dto.SetResponseDto;
 import com.example.SetRESTAPI.api.model.*;
-import com.example.SetRESTAPI.api.publics.CardStatus;
-import com.example.SetRESTAPI.api.publics.GameStatus;
 import com.example.SetRESTAPI.api.repository.*;
 import com.example.SetRESTAPI.logic.SetLogic;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class SetService
@@ -27,8 +19,6 @@ public class SetService
     private SetRepository setRepository;
     @Autowired
     private SetCardRepository setCardRepository;
-    @Autowired
-    private SetLogic setLogic;
     @Autowired
     private GameRepository gameRepository;
     @Autowired
@@ -44,27 +34,6 @@ public class SetService
         return setRepository.findById(id);
     }
 
-    public boolean validateAndSaveSet(List<DeckCardDto> cards, int gameId){
-
-        boolean setValid = this.setLogic.isValidSet(cards);
-
-        List<Integer> cardIds = new ArrayList<>();
-
-        /// Set Deckcards to In Found Set
-        if (setValid){
-
-            for (DeckCardDto card: cards){
-                cardIds.add(card.getCardId());
-            }
-
-            deckCardRepository.setDeckCardStatusToFoundSet(cardIds.toArray(new Integer[0]), gameId);
-
-            Set set = addSet(gameId);
-            addSetCard(cards, set);
-        }
-
-        return setValid;
-    }
 
     public Set addSet(int gameId) {
         Game game = gameRepository.findById((long)gameId).orElse(null);
@@ -82,6 +51,8 @@ public class SetService
         return setCardRepository.saveAll(setCards);
     }
 
+
+    @Transactional
     public void processValidSet(Game game, List<DeckCardDto> setCards){
 
         List<Integer> setCardIds = new ArrayList<>();
@@ -97,8 +68,7 @@ public class SetService
                 setCardIds.toArray(new Integer[0]), game.getGame_id());
 
         //Add new Set + SetCards to Database
-        Set set =
-                addSet(game.getGame_id());
+        Set set = addSet(game.getGame_id());
         addSetCard(setCards, set);
     }
 }

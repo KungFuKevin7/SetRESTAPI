@@ -8,7 +8,6 @@ import com.example.SetRESTAPI.api.service.FoundSetService;
 import com.example.SetRESTAPI.api.service.GameplayService;
 import com.example.SetRESTAPI.api.service.SetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,20 +39,8 @@ public class SetController {
         );
     }
 
-    @PostMapping("/validate-for-game/{gameId}")
-    public ResponseEntity<Boolean> validateSet(@RequestBody List<DeckCardDto> cards, @PathVariable int gameId){
-
-        boolean isValidSet = setService.validateAndSaveSet(cards, gameId);
-
-        if(isValidSet){
-            return ResponseEntity.ok(true);
-        }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
-        }
-    }
-
     @PostMapping("/handle-validation-with-new-board/{gameId}")
-    public ResponseEntity<GameStateDto> handelNewCards(@RequestBody List<DeckCardDto> foundsSetCards, @PathVariable int gameId){
+    public ResponseEntity<GameStateDto> validateAndUpdateBoard(@RequestBody List<DeckCardDto> foundsSetCards, @PathVariable int gameId){
         GameStateDto gameStateDto = gameplayService.validateSetAndUpdateBoard(gameId, foundsSetCards);
 
         return ResponseEntity.ok(gameStateDto);
